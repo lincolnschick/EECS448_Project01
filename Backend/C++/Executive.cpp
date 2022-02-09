@@ -88,3 +88,34 @@ void Executive::hitMissile(Board &p1, Board &p2)
     }
     p2.printBoardWOShip();
 }
+
+void Executive::run()
+{
+    takeNumOfShips();
+
+    placeShips(player1);
+    placeShips(player2);
+
+    cout << "Let's destory some ships!" << endl << endl;
+
+    do
+    {
+        hitMissile(player1, player2);
+        hitMissile(player2, player1);
+    } while (!player1.allShipsSunk() && !player2.allShipsSunk());
+
+    if (player1.allShipsSunk() && !player2.allShipsSunk())
+    {
+        cout << "Player 2 has won!" << endl;
+    }
+
+    else if (player2.allShipsSunk() && !player1.allShipsSunk())
+    {
+        cout << "Player 1 has won!" << endl;
+    }
+
+    else 
+    {
+        cout << "It is a draw!" << endl;
+    }
+}
