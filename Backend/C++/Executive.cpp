@@ -57,3 +57,34 @@ void Executive::placeShips(Board &player)
         player.printBoardWShip(); 
     }
 }
+
+void Executive::hitMissile(Board &p1, Board &p2)
+{
+    cout << "Player " << p1.getId() << ": " << endl;
+    cout << "Enter the column number (A-J) of player" << p2.getId()<<"'s box you want to attack : ";
+    cin >> colPos;
+    colPos = colPos - 65;
+    cout << "Enter the row number (1-10) of the player" << p2.getId()<< "'s box you want to attack : ";
+    cin >> rowPos;
+    rowPos--;
+
+    /*
+        hit validation
+    */
+
+    //If a ship is hit
+    if (p2.updateBoardHit(rowPos, colPos) == true)
+    {
+        cout << "Hit Successful.\n";
+        //If the hit caused the whole ship to sink
+        if (p2.shipDestroyed(rowPos, colPos))
+        {
+            cout << "Enemy ship destroyed.\n";
+        }
+    }
+    else
+    {
+        cout << "Hit Missed.\n";
+    }
+    p2.printBoardWOShip();
+}
