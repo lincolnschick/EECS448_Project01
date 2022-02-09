@@ -88,3 +88,90 @@ void Board::placeShip(int i, int j, int length, int orientation)
 		}
 	}
 }
+
+// invoked after ship is hit
+bool Board::shipDestroyed(int i, int j)
+{
+	 
+	if (i == 0 && j == 0)
+	{
+		if (m_board[i + 1][j] != 'S' && m_board[i][j + 1] != 'S')
+		{
+			return true;
+		}
+		return false;
+	}
+
+	else if (i == 0 && j == 9)
+	{
+		if (m_board[i + 1][j] != 'S' && m_board[i][j - 1] != 'S')
+		{
+			return true;
+		}
+		return false;
+	}
+
+	else if (i == 9 && j == 0)
+	{
+		if (m_board[i][j + 1] != 'S' && m_board[i - 1][j] != 'S')
+		{
+			return true;
+		}
+		return false;
+	}
+
+	else if (i == 9 && j == 9)
+	{
+		if (m_board[i][j - 1] != 'S' && m_board[i - 1][j] != 'S')
+		{
+			return true;
+		}
+		return false;
+	}
+
+	else if (i == 0)
+	{
+		if (m_board[i + 1][j] != 'S' && m_board[i][j + 1] != 'S' && m_board[i][j - 1] != 'S')
+		{
+			return true;
+		}
+		return false;
+	}
+
+	else if (i == 9)
+	{
+		if (m_board[i - 1][j] != 'S' && m_board[i][j + 1] != 'S' && m_board[i][j - 1] != 'S')
+		{
+			return true;
+		}
+		return false;
+	}
+
+	else if (j == 0)
+	{
+		if (m_board[i - 1][j] != 'S' && m_board[i][j + 1] != 'S' && m_board[i + 1][j] != 'S')
+		{
+			return true;
+		}
+		return false;
+	}
+
+	else if (j == 9)
+	{
+		if (m_board[i - 1][j] != 'S' && m_board[i][j - 1] != 'S' && m_board[i + 1][j] != 'S')
+		{
+			return true;
+		}
+		return false;
+	}
+
+	else if (m_board[i + 1][j] != 'S' && m_board[i][j + 1] != 'S' && m_board[i - 1][j] != 'S' && m_board[i][j - 1] != 'S') // D R U L
+	{
+		return true;
+	}
+
+	else
+	{
+		return false;
+	}
+}
