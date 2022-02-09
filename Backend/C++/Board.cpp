@@ -35,3 +35,56 @@ Board::~Board()
 	}
 	delete[] m_board;
 }
+
+void Board::placeShip(int i, int j, int length, int orientation)
+{
+	m_board[i][j] = 'S';
+	int iPos = i;
+	int jPos = j;
+	shipOrientation = orientation;
+
+	// If ship oriented up
+	if (shipOrientation == 1)
+	{
+		int shipSize = length;
+		while (shipSize != 1)
+		{
+			m_board[iPos - 1][jPos] = 'S';
+			shipSize--;
+			iPos--;
+		}
+	}
+	// If ship oriented down
+	if (shipOrientation == 2)
+	{
+		int shipSize = length;
+		while (shipSize != 1)
+		{
+			m_board[iPos + 1][jPos] = 'S';
+			shipSize--;
+			iPos++;
+		}
+	}
+	// If ship oriented left
+	if (shipOrientation == 3)
+	{
+		int shipSize = length;
+		while (shipSize != 1)
+		{
+			m_board[iPos][jPos - 1] = 'S';
+			shipSize--;
+			jPos--;
+		}
+	}
+	// If ship oriented right
+	if (shipOrientation == 4)
+	{
+		int shipSize = length;
+		while (shipSize != 1)
+		{
+			m_board[iPos][jPos + 1] = 'S';
+			shipSize--;
+			jPos++;
+		}
+	}
+}
