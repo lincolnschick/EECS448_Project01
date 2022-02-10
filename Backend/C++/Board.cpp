@@ -175,3 +175,58 @@ bool Board::shipDestroyed(int i, int j)
 		return false;
 	}
 }
+
+void Board::printBoardWOShip()
+{
+    int row = 01;
+    cout << "   A B C D E F G H I J\n";
+    for (int i = 0; i < m_rows; i++)
+    {
+        if (row != 10)
+        {
+            cout << ' ' << row << ' ';
+            row++;
+        }
+        else
+        {
+            cout << row << ' ';
+        }
+        for (int j = 0; j < m_cols; j++)
+        {
+            if (m_board[i][j] == 'S')
+            {
+                cout << ". ";
+            }
+            else
+            {
+                cout << m_board[i][j] << ' ';
+            }
+        }
+        cout << endl;
+    }
+	cout << endl;
+}
+
+void Board::printBoardWShip()
+{
+    int row = 01;
+    cout << "   A B C D E F G H I J\n";
+    for (int i = 0; i < m_rows; i++)
+    {
+        if (row != 10)
+        {
+            cout << ' ' << row << ' ';
+            row++;
+        }
+        else
+        {
+            cout << row << ' ';
+        }
+        for (int j = 0; j < m_cols; j++)
+        {
+            cout << m_board[i][j] << ' ';
+        }
+        cout << endl;
+    }
+	cout << endl;
+}
