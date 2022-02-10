@@ -230,3 +230,35 @@ void Board::printBoardWShip()
     }
 	cout << endl;
 }
+
+
+bool Board::allShipsSunk()
+{
+	for (int i = 0; i < m_rows; i++)
+	{
+		for (int j = 0; j < m_cols; j++)
+		{
+			if (m_board[i][j] == 'S')
+			{
+				return false;
+			}
+		}
+	}
+
+	return true;
+}
+
+bool Board::updateBoardHit(int i, int j)
+{
+	if (m_board[i][j] == '.')
+	{
+		m_board[i][j] = 'M';
+		return false;
+	}
+
+	else if (m_board[i][j] == 'S')
+	{
+		m_board[i][j] = 'X';
+		return true;
+	}
+}
