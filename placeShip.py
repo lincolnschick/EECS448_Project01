@@ -2,7 +2,9 @@ from tkinter import *
 
 
 
-def enterPlayerShip (player):#not finished
+def enterPlayerShip (player, shipNumber):#player -> (int)player's number (1, 2), shipNumber -> (int)number of ships (positive int, not to exceed 5)
+    if (shipNumber > 5 or shipNumber < 0):
+        raise ValueError ("Wrongful number of ships!")
     window = Tk()
     currentShip = 1
     ship1 = (5, 5, True) #ship array: (int1, int2, bool)
@@ -46,6 +48,9 @@ def enterPlayerShip (player):#not finished
         
 
     def submitClicked():
+        if (currentShip < shipNumber):
+            print ("Not yet!")
+            return
         print("ship submitted")
         window.destroy()
         
@@ -57,7 +62,7 @@ def enterPlayerShip (player):#not finished
         nonlocal ship4
         nonlocal ship5
         print("nextClicked")
-        if (currentShip == 5):
+        if (currentShip >= shipNumber):
             print("Already at last ship!")
             return
         currentShip = currentShip + 1
@@ -277,5 +282,3 @@ def compliant(ship1, ship2, ship3, ship4, ship5):
         for j in range(i + 1,n):
             if(positionTable[i] == positionTable[j]): return False
     return True
-
-enterPlayerShip(1)
