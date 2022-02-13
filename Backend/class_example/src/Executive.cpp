@@ -2,6 +2,7 @@
 #include <iostream>
 using namespace std;
 
+//Constructor crating 
 Executive::Executive() : player1(1), player2(2)
 {
 }
@@ -15,6 +16,7 @@ void Executive::takeNumOfShips()
     // Checking for correct input
     if (numOfShips < 1 || numOfShips > 5)
     {
+        //Keep prompting the user to enter a valid num of ships until they do
         do
         {
             cout << "Please enter a valid number of ships: ";
@@ -50,7 +52,7 @@ void Executive::placeShips(Board &player)
         //Check for bad input
         if (!player.validPlace(startRowIndex, startColIndex, i, shipOrientation))
         {
-            //Keep prompting to reenter the row,col, orientation until they are valid
+            //Keep prompting to re-enter the row,col, orientation until they are valid
             do
             {
                 cout << "\nShip cannot be placed at these spots. Try again\n";
@@ -71,15 +73,18 @@ void Executive::placeShips(Board &player)
 
             } while (!player.validPlace(startRowIndex, startColIndex, i, shipOrientation));
         }
-
+        //After filtering through the bad input, once the input is valid, place the ships on the board
         player.placeShip(startRowIndex, startColIndex, i, shipOrientation);
+        //Print the board with the ships so the player can see his own ship placement
         player.printBoardWShip();
     }
 }
 
 void Executive::hitMissile(Board &p1, Board &p2)
 {
+    //Print the board without the ships
     p2.printBoardWOShip();
+    //Ask the user for col and idex nums
     cout << "Player " << p1.getId() << ": " << endl;
     cout << "Enter the column number (A-J) of player" << p2.getId() << "'s box you want to attack : ";
     cin >> colPos;
@@ -88,8 +93,10 @@ void Executive::hitMissile(Board &p1, Board &p2)
     cin >> rowPos;
     rowPos--;
 
+    //Check if the inputs are invalid
     if(!p2.validHit(rowPos, colPos))
     {
+        //Keep prompting the user to re-enter inputs until the inputs are valid
         do
         {
             cout << "Please enter valid row and column: \n";
@@ -114,10 +121,12 @@ void Executive::hitMissile(Board &p1, Board &p2)
             cout << "Enemy ship destroyed.\n";
         }
     }
+    //If it is a miss
     else
     {
         cout << "Hit Missed.\n";
     }
+    //Print the board again after the hit without displaying the ships
     p2.printBoardWOShip();
 }
 
