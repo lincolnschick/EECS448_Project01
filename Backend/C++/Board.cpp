@@ -3,6 +3,14 @@
 
 using namespace std;
 
+/*
+Legend:
+. -> Water
+S -> Ship
+M -> Miss
+X -> Hit
+*/
+
 // Creates an empty 10x10 board of water
 // Initializer list
 // idNum in parameter as an alternative to a setter
@@ -12,12 +20,14 @@ Board::Board(int idNum) : m_rows(10), m_cols(10), shipOrientation(0), id(idNum)
 	//	int m_start_col, m_end_col;
 	//	int totalShips = 1;
 
-
+	//Creates an empty 2D array of length 10x10
 	m_board = new char *[m_rows];
 	for (int i = 0; i < m_rows; i++)
 	{
 		m_board[i] = new char[m_cols];
 	}
+
+	//Fills the 2D array with water
 	for (int i = 0; i < m_rows; i++)
 	{
 		for (int j = 0; j < m_cols; j++)
@@ -27,7 +37,8 @@ Board::Board(int idNum) : m_rows(10), m_cols(10), shipOrientation(0), id(idNum)
 	}
 }
 
-Board::~Board()
+//Destructor 
+Board::~Board() 
 {
 	for (int i = 0; i < m_rows; i++)
 	{
@@ -36,6 +47,7 @@ Board::~Board()
 	delete[] m_board;
 }
 
+//Will place ships on the board
 void Board::placeShip(int i, int j, int length, int orientation)
 {
 	m_board[i][j] = 'S';
@@ -89,11 +101,21 @@ void Board::placeShip(int i, int j, int length, int orientation)
 	}
 }
 
-// invoked after ship is hit
+/*
+Invoked after ship is hit
+Checks around the index hit to see if a part of the ship exists, if it does, then the ship isn't
+destroyed completely, otherwise it is.
+
+	m_board[i + 1][j] -> Checks Bottom of the index hit.
+	m_board[i][j + 1] -> Checks Right of the index hit.
+	m_board[i - 1][j] -> Checks Top of the index hit.
+	m_board[i][j - 1] -> Checks Left of the index hit.
+
+*/
 bool Board::shipDestroyed(int i, int j)
 {
 	 
-	if (i == 0 && j == 0)
+	if (i == 0 && j == 0) //Top-Left corner
 	{
 		if (m_board[i + 1][j] != 'S' && m_board[i][j + 1] != 'S')
 		{
@@ -102,7 +124,7 @@ bool Board::shipDestroyed(int i, int j)
 		return false;
 	}
 
-	else if (i == 0 && j == 9)
+	else if (i == 0 && j == 9) //Top-Right corner 
 	{
 		if (m_board[i + 1][j] != 'S' && m_board[i][j - 1] != 'S')
 		{
@@ -111,7 +133,7 @@ bool Board::shipDestroyed(int i, int j)
 		return false;
 	}
 
-	else if (i == 9 && j == 0)
+	else if (i == 9 && j == 0) //Bottom-Left corner
 	{
 		if (m_board[i][j + 1] != 'S' && m_board[i - 1][j] != 'S')
 		{
@@ -120,7 +142,7 @@ bool Board::shipDestroyed(int i, int j)
 		return false;
 	}
 
-	else if (i == 9 && j == 9)
+	else if (i == 9 && j == 9) //Bottom-Right corner
 	{
 		if (m_board[i][j - 1] != 'S' && m_board[i - 1][j] != 'S')
 		{
@@ -129,7 +151,7 @@ bool Board::shipDestroyed(int i, int j)
 		return false;
 	}
 
-	else if (i == 0)
+	else if (i == 0) // Top row of the grid
 	{
 		if (m_board[i + 1][j] != 'S' && m_board[i][j + 1] != 'S' && m_board[i][j - 1] != 'S')
 		{
@@ -138,7 +160,7 @@ bool Board::shipDestroyed(int i, int j)
 		return false;
 	}
 
-	else if (i == 9)
+	else if (i == 9) //Bottom row of the grid
 	{
 		if (m_board[i - 1][j] != 'S' && m_board[i][j + 1] != 'S' && m_board[i][j - 1] != 'S')
 		{
@@ -147,7 +169,7 @@ bool Board::shipDestroyed(int i, int j)
 		return false;
 	}
 
-	else if (j == 0)
+	else if (j == 0) //Left-most column of the grid
 	{
 		if (m_board[i - 1][j] != 'S' && m_board[i][j + 1] != 'S' && m_board[i + 1][j] != 'S')
 		{
@@ -156,7 +178,7 @@ bool Board::shipDestroyed(int i, int j)
 		return false;
 	}
 
-	else if (j == 9)
+	else if (j == 9) //Right-most column of the grid
 	{
 		if (m_board[i - 1][j] != 'S' && m_board[i][j - 1] != 'S' && m_board[i + 1][j] != 'S')
 		{
@@ -165,17 +187,18 @@ bool Board::shipDestroyed(int i, int j)
 		return false;
 	}
 
-	else if (m_board[i + 1][j] != 'S' && m_board[i][j + 1] != 'S' && m_board[i - 1][j] != 'S' && m_board[i][j - 1] != 'S') // D R U L
+	else if (m_board[i + 1][j] != 'S' && m_board[i][j + 1] != 'S' && m_board[i - 1][j] != 'S' && m_board[i][j - 1] != 'S') // Checks all the other grid positions 
 	{
 		return true;
 	}
 
 	else
 	{
-		return false;
+		return false; //Ship wasn't destroyed completely 
 	}
 }
 
+//Prints the board without showing ships on it
 void Board::printBoardWOShip()
 {
     int row = 01;
