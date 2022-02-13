@@ -50,7 +50,7 @@ Board::~Board()
 //Will place ships on the board
 void Board::placeShip(int i, int j, int length, int orientation)
 {
-	m_board[i][j] = 'S';
+	m_board[i][j] = 'S'; 
 	int iPos = i;
 	int jPos = j;
 	shipOrientation = orientation;
@@ -201,7 +201,7 @@ bool Board::shipDestroyed(int i, int j)
 //Prints the board without showing ships on it
 void Board::printBoardWOShip()
 {
-    int row = 01;
+    int row = 1;
     cout << "   A B C D E F G H I J\n";
     for (int i = 0; i < m_rows; i++)
     {
@@ -230,20 +230,21 @@ void Board::printBoardWOShip()
 	cout << endl;
 }
 
+//Prints the grid with ships on it.
 void Board::printBoardWShip()
 {
-    int row = 01;
-    cout << "   A B C D E F G H I J\n";
+    int row = 1;
+    cout << "   A B C D E F G H I J\n"; // Labelling columns as alphabets
     for (int i = 0; i < m_rows; i++)
     {
         if (row != 10)
         {
             cout << ' ' << row << ' ';
-            row++;
+            row++; //Increments the row number
         }
         else
         {
-            cout << row << ' ';
+            cout << row << ' '; //Will output row# 10
         }
         for (int j = 0; j < m_cols; j++)
         {
@@ -254,7 +255,8 @@ void Board::printBoardWShip()
 	cout << endl;
 }
 
-
+//If there is even a single 'S' on the grid then that means a ship or part of it still exists
+//and all ships haven't sunk.
 bool Board::allShipsSunk()
 {
 	for (int i = 0; i < m_rows; i++)
@@ -267,21 +269,21 @@ bool Board::allShipsSunk()
 			}
 		}
 	}
-
 	return true;
 }
 
+//Will update the board after it is hit.
 bool Board::updateBoardHit(int i, int j)
 {
-	if (m_board[i][j] == '.')
+	if (m_board[i][j] == '.')	//This means we hit the water and the shot was a miss
 	{
 		m_board[i][j] = 'M';
 		return false;
 	}
 
-	else if (m_board[i][j] == 'S')
+	else if (m_board[i][j] == 'S') //This means we hit the shit and the shot was a hit
 	{
-		m_board[i][j] = 'X';
+		m_board[i][j] = 'X'; //This shows that part of the ship was destroyed. 
 		return true;
 	}
 }
