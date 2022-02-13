@@ -127,11 +127,12 @@ bool Board::validPlace(int i, int j, int length, int orientation)
 
 bool Board::validHit(int i, int j)
 {
+	//If hitting outside board
 	if (i < 0 || i > 9 || j < 0 || j > 9)
 	{
 		return false;
 	}
-
+	//If hitting at a spot that has already been hit
 	if (m_board[i][j] == 'X' || m_board[i][j] == 'M' )
 	{
 		return false;
@@ -153,11 +154,12 @@ void Board::placeShip(int i, int j, int length, int orientation)
 	// If ship oriented up
 	if (shipOrientation == 1)
 	{
+		//Fill the vectors for the start and end coordinates, will be used in the shipDestroyed()
 		shipIStart.push_back(iPos-length+1);
 		shipIEnd.push_back(iPos);
 		shipJStart.push_back(jPos);
 		shipJEnd.push_back(jPos);
-
+		//Place S for the entire length of the ship
 		int shipSize = length;
 		while (shipSize != 1)
 		{
@@ -169,11 +171,12 @@ void Board::placeShip(int i, int j, int length, int orientation)
 	// If ship oriented down
 	if (shipOrientation == 2)
 	{
+		//Fill the vectors for the start and end coordinates
 		shipIStart.push_back(iPos);
 		shipIEnd.push_back(iPos+length-1);
 		shipJStart.push_back(jPos);
 		shipJEnd.push_back(jPos);
-
+		//Place S for the entire length of the ship
 		int shipSize = length;
 		while (shipSize != 1)
 		{
@@ -185,11 +188,12 @@ void Board::placeShip(int i, int j, int length, int orientation)
 	// If ship oriented left
 	if (shipOrientation == 3)
 	{
+		//Fill the vectors for the start and end coordinates
 		shipIStart.push_back(iPos);
 		shipIEnd.push_back(iPos);
 		shipJStart.push_back(jPos-length+1);
 		shipJEnd.push_back(jPos);
-
+		//Place S for the entire length of the ship
 		int shipSize = length;
 		while (shipSize != 1)
 		{
@@ -201,11 +205,12 @@ void Board::placeShip(int i, int j, int length, int orientation)
 	// If ship oriented right
 	if (shipOrientation == 4)
 	{
+		//Fill the vectors for the start and end coordinates
 		shipIStart.push_back(iPos);
 		shipIEnd.push_back(iPos);
 		shipJStart.push_back(jPos);
 		shipJEnd.push_back(jPos+length-1);
-
+		//Place S for the entire length of the ship
 		int shipSize = length;
 		while (shipSize != 1)
 		{
@@ -218,6 +223,7 @@ void Board::placeShip(int i, int j, int length, int orientation)
 
 bool Board::allShipsSunk()
 {
+	//Nested for loop that checks the whole board for any S
 	for (int i = 0; i < m_rows; i++)
 	{
 		for (int j = 0; j < m_cols; j++)
@@ -234,34 +240,41 @@ bool Board::allShipsSunk()
 
 bool Board::updateBoardHit(int i, int j)
 {
+	//If there is no ship, then display M for miss
 	if (m_board[i][j] == '.')
 	{
 		m_board[i][j] = 'M';
 		return false;
 	}
-
+	//If there is a ship, then display X for hit
 	else if (m_board[i][j] == 'S')
 	{
 		m_board[i][j] = 'X';
 		return true;
 	}
 }
+
 // invoked after ship is hit
 bool Board::shipDestroyed(int i, int j)
 {
+	//Check which ship has been hit, the indexes of the vector is the ship# (0-4)
 	int shipNum = 0;
 	for (int z = 0; z < shipIStart.size(); z++)
 	{
 		if (i >= shipIStart[z] && i <= shipIEnd[z] && j >= shipJStart[z] && j <= shipJEnd[z])
 		{
+			//Now we know which ship has been hit, and we can use it below to check if the whole ship has been sunk
 			shipNum = z;
 		}
 	}
 
-	if (shipIStart[shipNum] == shipIEnd[shipNum]) // Ship oriented horizontally
+	 // Ship oriented horizontally
+	if (shipIStart[shipNum] == shipIEnd[shipNum])
 	{
+		//Check if there still is any S left for that ship
 		for (int z = shipJStart[shipNum]; z <= shipJEnd[shipNum]; z++)
 		{
+			//If an S is found, the whole ship hasn't been sunk
 			if (m_board[i][z] == 'S')
 			{
 				return false;
@@ -270,10 +283,13 @@ bool Board::shipDestroyed(int i, int j)
 		return true;
 	}
 
-	else if (shipJStart[shipNum] == shipJEnd[shipNum]) // Ship oriented vertically
+	// Ship oriented vertically
+	else if (shipJStart[shipNum] == shipJEnd[shipNum]) 
 	{
+		//Check if there still is any S left for that ship
 		for (int z = shipIStart[shipNum]; z <= shipIEnd[shipNum]; z++)
 		{
+			//If an S is found, the whole ship hasn't been sunk
 			if (m_board[z][j] == 'S')
 			{
 				return false;
@@ -286,7 +302,9 @@ bool Board::shipDestroyed(int i, int j)
 void Board::printBoardWOShip()
 {
 	int row = 01;
+	//Print the col heading before printing the array
 	cout << "   A B C D E F G H I J\n";
+	//Print the row headings before printing the next row of the array
 	for (int i = 0; i < m_rows; i++)
 	{
 		if (row != 10)
