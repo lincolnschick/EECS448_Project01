@@ -21,7 +21,7 @@ class Board
 		//Places all the S for a ship on the array,	doesn't check for valid input	
 		void placeShip(int i, int j, int length, int orientation);
 		//INCOMPLETE: validates the position user wants to put ship at
-		bool validShipPosition(int i, int j, int length, int orientation);
+		//bool validShipPosition(int i, int j, int length, int orientation);
 		//Check if all the ships of the user are sunk 
 		bool allShipsSunk();
 		//Update users board after being hit and returns true if it is a hit
