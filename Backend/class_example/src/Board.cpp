@@ -3,8 +3,16 @@
 
 using namespace std;
 
+/*
+Legend:
+. -> Water
+S -> Ship
+M -> Miss
+X -> Hit
+*/
+
 // Creates an empty 10x10 board of water
-// INitializer list
+// Initializer list
 // idNum in parameter as an alternative to a setter
 Board::Board(int idNum) : m_rows(10), m_cols(10), shipOrientation(0), id(idNum)
 {
@@ -26,6 +34,7 @@ Board::Board(int idNum) : m_rows(10), m_cols(10), shipOrientation(0), id(idNum)
 	}
 }
 
+//Destructor
 Board::~Board()
 {
 	for (int i = 0; i < m_rows; i++)
@@ -35,6 +44,7 @@ Board::~Board()
 	delete[] m_board;
 }
 
+//Will place ships on the board
 bool Board::validPlace(int i, int j, int length, int orientation)
 {
 	//if starting outside board
@@ -117,14 +127,14 @@ bool Board::validPlace(int i, int j, int length, int orientation)
 			if (m_board[i][z] == 'S')
 			{
 				return false;
-			}
-			
+			}	
 		}
 		return true;
 	}
 
 }
 
+//Ensures that a legal spot is hit/attacked on the board
 bool Board::validHit(int i, int j)
 {
 	//If hitting outside board
@@ -137,8 +147,6 @@ bool Board::validHit(int i, int j)
 	{
 		return false;
 	}
-	
-	
 	return true;
 	
 }
@@ -221,6 +229,8 @@ void Board::placeShip(int i, int j, int length, int orientation)
 	}
 }
 
+//If there is even a single 'S' on the grid then that means a ship or part of it still exists
+//and all ships haven't sunk.
 bool Board::allShipsSunk()
 {
 	//Nested for loop that checks the whole board for any S
@@ -238,10 +248,11 @@ bool Board::allShipsSunk()
 	return true;
 }
 
+//Will update the board after it is hit.
 bool Board::updateBoardHit(int i, int j)
 {
 	//If there is no ship, then display M for miss
-	if (m_board[i][j] == '.')
+	if (m_board[i][j] == '.') //This means we hit the water and the shot was a miss
 	{
 		m_board[i][j] = 'M';
 		return false;
@@ -301,7 +312,7 @@ bool Board::shipDestroyed(int i, int j)
 
 void Board::printBoardWOShip()
 {
-	int row = 01;
+	int row = 1;
 	//Print the col heading before printing the array
 	cout << "   A B C D E F G H I J\n";
 	//Print the row headings before printing the next row of the array
@@ -309,12 +320,12 @@ void Board::printBoardWOShip()
 	{
 		if (row != 10)
 		{
-			cout << ' ' << row << ' ';
-			row++;
+			cout << ' ' << row << ' '; //White-space before row is only used to account for the two-digit 10-th row
+			row++; //Increments the row number
 		}
 		else
 		{
-			cout << row << ' ';
+			cout << row << ' '; //Will output row# 10
 		}
 		for (int j = 0; j < m_cols; j++)
 		{
@@ -334,18 +345,18 @@ void Board::printBoardWOShip()
 
 void Board::printBoardWShip()
 {
-	int row = 01;
-	cout << "   A B C D E F G H I J\n";
+	int row = 1;
+	cout << "   A B C D E F G H I J\n"; // Labelling columns as alphabets
 	for (int i = 0; i < m_rows; i++)
 	{
 		if (row != 10)
 		{
-			cout << ' ' << row << ' ';
-			row++;
+			cout << ' ' << row << ' '; //White-space before row is only used to account for the two-digit 10-th row
+			row++; //Increments the row number
 		}
 		else
 		{
-			cout << row << ' ';
+			cout << row << ' '; //Will output row# 10
 		}
 		for (int j = 0; j < m_cols; j++)
 		{
