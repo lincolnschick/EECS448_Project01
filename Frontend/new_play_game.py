@@ -1,7 +1,46 @@
 from tkinter import *
 import tkinter.font as Font
 from functools import partial
+#import placeShip
+#import placeShipStart
 import random
+
+# def board_window():
+#     newWindow1 = Toplevel(root)
+#     newWindow1.title("")
+#     newWindow1.geometry("500x500")
+#     entry1 = Entry(newWindow1, justify='center' , font=("Arial", 12), fg="Grey")
+#     entry1.pack()
+#     newWindow1.mainloop()
+
+    # display = Tk()
+    # display.wm_title("BATTLESHIPS")
+    # display.configure(background='black')
+    # board_font = Font.Font(size=12, weight='normal')
+    # label_font = Font.Font(size=11, weight='normal')
+    # cell_style ={
+    #     "ship_txt": "S",
+    #     "ship_color": "red",
+    #
+    #     "Hit_txt": "X",
+    #     "Hit_txt": "red",
+    #
+    #     "nonHIT_txt": "O",
+    #     "nonship_color": "white",
+    #
+    #     "init_txt": " ",
+    #     "init_color": "orange",
+    # }
+    # global player1_show, player1_play, player2_show, player2_play
+    # showlabel()
+    #
+    # sampleShip_x1 = random.randint(1, 10)
+    # sampleShip_y1 = random.randint(1, 10)
+    # sampleShip_x2 = random.randint(1, 10)
+    # sampleShip_y2 = random.randint(1, 10)
+    # demo()
+#def get_value():
+
 
 
 # create label for each cell
@@ -19,6 +58,7 @@ def player_turn():
                     player2_show[i][j].configure(fg="white")
                     player2_play[i][j].configure(fg="white")
                 elif j == 0:
+
                     player1_show[i][j].configure(fg="black")
                     player1_play[i][j].configure(fg="black")
                     player2_show[i][j].configure(fg="white")
@@ -50,13 +90,34 @@ def player_turn():
 
 def Hit_ship(s_x,s_y):
     player_turn()
-    if  s_x == sampleShip_x1 and s_y == sampleShip_y1:
-        player1_play[s_x][s_y].configure(text="X", fg="black", bg="Red",state = "disable")
-    elif s_x == sampleShip_x2 and s_y == sampleShip_y2:
-        player1_play[s_x][s_y].configure(text="X", fg="black", bg="Red",state = "disable")
+    global isTurn
+    if isTurn == False:
+        if  s_x == sampleShip_x1 and s_y == sampleShip_y1:
+            player1_play[s_x][s_y].configure(text="X", fg="black", bg="Red",state = "disable")
+        elif s_x == sampleShip_x2 and s_y == sampleShip_y2:
+            player1_play[s_x][s_y].configure(text="X", fg="black", bg="Red",state = "disable")
+        elif s_x == sampleShip_x3 and s_y == sampleShip_y3:
+            player1_play[s_x][s_y].configure(text="X", fg="black", bg="Red",state = "disable")
+        elif s_x == sampleShip_x4 and s_y == sampleShip_y4:
+            player1_play[s_x][s_y].configure(text="X", fg="black", bg="Red",state = "disable")
+        elif s_x == sampleShip_x5 and s_y == sampleShip_y5:
+            player1_play[s_x][s_y].configure(text="X", fg="black", bg="Red",state = "disable")
+        else:
+            player1_play[s_x][s_y].configure(text="N", fg="black", bg="Wihte",state = "disable")
     else:
-        player1_play[s_x][s_y].configure(text="N", fg="black", bg="Wihte",state = "disable")
+        if  s_x == sampleShip_x6 and s_y == sampleShip_y6:
+            player2_play[s_x][s_y].configure(text="X", fg="black", bg="Red",state = "disable")
+        elif s_x == sampleShip_x7 and s_y == sampleShip_y7:
+            player2_play[s_x][s_y].configure(text="X", fg="black", bg="Red",state = "disable")
+        elif s_x == sampleShip_x8 and s_y == sampleShip_y8:
+            player2_play[s_x][s_y].configure(text="X", fg="black", bg="Red",state = "disable")
+        elif s_x == sampleShip_x9 and s_y == sampleShip_y9:
+            player2_play[s_x][s_y].configure(text="X", fg="black", bg="Red",state = "disable")
+        elif s_x == sampleShip_x10 and s_y == sampleShip_y10:
+            player2_play[s_x][s_y].configure(text="X", fg="black", bg="Red",state = "disable")
 
+        else:
+            player2_play[s_x][s_y].configure(text="N", fg="black", bg="Wihte",state = "disable")
 def create_label(lb,txt,x,y):
     if lb == "label":
         label = Label(display, text = txt, width=2, height=1, font=label_font, fg="White", bg="black")
@@ -64,10 +125,10 @@ def create_label(lb,txt,x,y):
         label = Button(display, text = txt, width=2, height=1, font=label_font, fg="black", bg="Orange",command = partial(Hit_ship,x,y))
     return label
 
-
-def test():
-    global player1_show
-    player1_show[9][9].configure(fg="pink",bg="pink")
+#
+# def test():
+#     global player1_show
+#     player1_show[9][9].configure(fg="pink",bg="pink")
 
 # build label for each player pannel
 def build_bd_axis():
@@ -156,13 +217,22 @@ def placingship_ship(playerboard,s_x,s_y):
     for i in range(1,11):
         for j in range(1,11):
             if i == s_x and j == s_y:
-                playerboard[i][j].configure(text="X", fg="black", bg="Red")
+
+                playerboard[s_x][s_y].configure(textvariable=cell_style, fg="black", bg="Red")
 def demo():
 
     placingship_ship(player1_show,sampleShip_x1,sampleShip_y1)
+    placingship_ship(player1_show, sampleShip_x2, sampleShip_y2)
+    placingship_ship(player1_show, sampleShip_x3, sampleShip_y3)
+    placingship_ship(player1_show, sampleShip_x4, sampleShip_y4)
+    placingship_ship(player1_show, sampleShip_x5, sampleShip_y5)
 
+    placingship_ship(player2_show,sampleShip_x6,sampleShip_y6)
+    placingship_ship(player2_show, sampleShip_x7, sampleShip_y7)
+    placingship_ship(player2_show, sampleShip_x8, sampleShip_y8)
+    placingship_ship(player2_show, sampleShip_x9, sampleShip_y9)
+    placingship_ship(player2_show, sampleShip_x10, sampleShip_y10)
 
-    placingship_ship(player2_show,sampleShip_x2,sampleShip_y2)
 
 if __name__ == '__main__':
     display = Tk()
@@ -170,12 +240,42 @@ if __name__ == '__main__':
     display.configure(background='black')
     board_font = Font.Font(size=12, weight='normal')
     label_font = Font.Font(size=11, weight='normal')
+    cell_style ={
+        "ship_txt": "S",
+        "ship_color": "red",
+
+        "Hit_txt": "X",
+        "Hit_txt": "red",
+
+        "nonHIT_txt": "O",
+        "nonship_color": "white",
+
+        "init_txt": " ",
+        "init_color": "orange",
+    }
     global player1_show, player1_play, player2_show, player2_play
     showlabel()
+
     sampleShip_x1 = random.randint(1, 10)
     sampleShip_y1 = random.randint(1, 10)
     sampleShip_x2 = random.randint(1, 10)
     sampleShip_y2 = random.randint(1, 10)
+    sampleShip_x3 = random.randint(1, 10)
+    sampleShip_y3 = random.randint(1, 10)
+    sampleShip_x4 = random.randint(1, 10)
+    sampleShip_y4 = random.randint(1, 10)
+    sampleShip_x5 = random.randint(1, 10)
+    sampleShip_y5 = random.randint(1, 10)
+    sampleShip_x6 = random.randint(1, 10)
+    sampleShip_y6 = random.randint(1, 10)
+    sampleShip_x7 = random.randint(1, 10)
+    sampleShip_y7 = random.randint(1, 10)
+    sampleShip_x8 = random.randint(1, 10)
+    sampleShip_y8 = random.randint(1, 10)
+    sampleShip_x9 = random.randint(1, 10)
+    sampleShip_y9 = random.randint(1, 10)
+    sampleShip_x10 = random.randint(1, 10)
+    sampleShip_y10 = random.randint(1, 10)
     demo()
 
     display.mainloop()
