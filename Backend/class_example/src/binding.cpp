@@ -8,6 +8,8 @@ namespace py = pybind11;
 PYBIND11_MODULE(class_example, m) {
     py::class_<Board>(m, "Board", py::dynamic_attr())
         .def(py::init<int>())
+        .def("validPlace", &Board::validPlace)
+        .def("validHit", &Board::validHit)
         .def("placeShip", &Board::placeShip)
         .def("allShipsSunk", &Board::allShipsSunk)
         .def("updateBoardHit", &Board::updateBoardHit)
