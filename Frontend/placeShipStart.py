@@ -1,3 +1,4 @@
+#By Junyi Zhao for KU EECS448 '22 Spring
 import cmd
 from placeShip import *
 from tkinter import *

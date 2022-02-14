@@ -1,3 +1,4 @@
+#By Junyi Zhao for KU EECS448 '22 Spring
 from tkinter import *
 import placeShip
 import placeShipStart
