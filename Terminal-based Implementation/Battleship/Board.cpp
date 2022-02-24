@@ -6,7 +6,7 @@ using namespace std;
 // Creates an empty 10x10 board of water
 // INitializer list
 // idNum in parameter as an alternative to a setter
-Board::Board(int idNum) : m_rows(10), m_cols(10), shipOrientation(0), id(idNum)
+Board::Board(int idNum) : m_rows(10), m_cols(10), shipOrientation(0), id(idNum), score(0)
 {
 	m_board = new char *[m_rows];
 	for (int i = 0; i < m_rows; i++)
@@ -62,7 +62,7 @@ bool Board::validPlace(int i, int j, int length, int orientation)
 	}
 
 	//Down
-	if (orientation == 2)
+	else if (orientation == 2)
 	{
 		//if ship going outside the board
 		if ((i+length-1) > 9)
@@ -81,7 +81,7 @@ bool Board::validPlace(int i, int j, int length, int orientation)
 		return true;
 	}
 
-	if (orientation == 3)
+	else if (orientation == 3)
 	{
 		//if ship going outside the board
 		if ((j-length+1) < 0)
@@ -100,7 +100,7 @@ bool Board::validPlace(int i, int j, int length, int orientation)
 		return true;
 	}
 
-	if (orientation == 4)
+	else
 	{
 		//if ship going outside the board
 		if ((j+length-1) > 9)
@@ -134,7 +134,7 @@ bool Board::validHit(int i, int j)
 		return false;
 	}
 	
-	
+	score++;
 	return true;
 	
 }
@@ -145,7 +145,6 @@ void Board::placeShip(int i, int j, int length, int orientation)
 	int iPos = i;
 	int jPos = j;
 	shipOrientation = orientation;
-	int shipNum = length-1;
 	
 	// If ship oriented up
 	if (shipOrientation == 1)
@@ -165,7 +164,7 @@ void Board::placeShip(int i, int j, int length, int orientation)
 		}
 	}
 	// If ship oriented down
-	if (shipOrientation == 2)
+	else if (shipOrientation == 2)
 	{
 		//Fill the vectors for the start and end coordinates
 		shipIStart.push_back(iPos);
@@ -182,7 +181,7 @@ void Board::placeShip(int i, int j, int length, int orientation)
 		}
 	}
 	// If ship oriented left
-	if (shipOrientation == 3)
+	else if (shipOrientation == 3)
 	{
 		//Fill the vectors for the start and end coordinates
 		shipIStart.push_back(iPos);
@@ -199,7 +198,7 @@ void Board::placeShip(int i, int j, int length, int orientation)
 		}
 	}
 	// If ship oriented right
-	if (shipOrientation == 4)
+	else
 	{
 		//Fill the vectors for the start and end coordinates
 		shipIStart.push_back(iPos);
@@ -243,7 +242,7 @@ bool Board::updateBoardHit(int i, int j)
 		return false;
 	}
 	//If there is a ship, then display X for hit
-	else if (m_board[i][j] == 'S')
+	else
 	{
 		m_board[i][j] = 'X';
 		return true;
@@ -276,7 +275,6 @@ bool Board::shipDestroyed(int i, int j)
 				return false;
 			}
 		}
-		return true;
 	}
 
 	// Ship oriented vertically
@@ -291,8 +289,8 @@ bool Board::shipDestroyed(int i, int j)
 				return false;
 			}
 		}
-		return true;
 	}
+	return true;
 }
 
 void Board::printBoardWOShip()

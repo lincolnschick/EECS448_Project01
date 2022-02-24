@@ -13,6 +13,7 @@ class Board
 		int m_rows, m_cols;
 		int shipOrientation;
 		int id;
+		int score;
 		vector<int> shipIStart;
 		vector<int> shipJStart;
 		vector<int> shipIEnd;
@@ -39,6 +40,8 @@ class Board
 		void printBoardWOShip();
 		//Returns the id of the player (to indicate if it is player 1 or player 2)
 		int getId() {return id;}
+		//Returns the score of the player
+		int getScore() {return score;}
 
 
 
