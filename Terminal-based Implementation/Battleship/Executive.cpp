@@ -2,6 +2,25 @@
 #include <iostream>
 using namespace std;
 
+//function to check for integer
+void checkInt(int& n)
+{
+	while ( cin.fail() )
+	{
+		cin.clear(); // unset failbit
+		
+		// skip bad input up to the next newline
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		
+		cout << "Sorry, your input did not seem to be an int. Try again: ";
+		cin >> n;
+	}
+	
+	//Flush out anything left in the stream (e.g. if they type 2.5 for an int
+	//  the .5 would still be there
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+}
+
 //Constructor crating 
 Executive::Executive() : player1(1), player2(2)
 {
@@ -13,6 +32,7 @@ void Executive::takeNumOfShips()
     cout << "BATTLESHIP!" << endl;
     cout << "Enter the number of ships you want to play with (1 to 5): ";
     cin >> numOfShips;
+    checkInt(numOfShips);
     // Checking for correct input
     if (numOfShips < 1 || numOfShips > 5)
     {
@@ -21,13 +41,14 @@ void Executive::takeNumOfShips()
         {
             cout << "Please enter a valid number of ships: ";
             cin >> numOfShips;
+            checkInt(numOfShips);
         } while (numOfShips < 1 || numOfShips > 5);
     }
 }
 
 void Executive::placeShips(Board &player)
 {
-
+    player.printBoardWShip();
     // Print Menu, take start row and col
     for (int i = 1; i <= numOfShips; i++)
     {
@@ -41,6 +62,7 @@ void Executive::placeShips(Board &player)
         startColIndex = startColIndex - 65;
         cout << "Starting row index (1 to 10): ";
         cin >> startRowIndex;
+        checkInt(startRowIndex);
         startRowIndex--;
 
         // Orient the ship in the specified direction
@@ -48,12 +70,14 @@ void Executive::placeShips(Board &player)
         cout << "Up = 1\nDown = 2\nLeft = 3\nRight = 4\n";
         cout << "Orientation: ";
         cin >> shipOrientation;
+        checkInt(shipOrientation);
         if (shipOrientation < 1 || shipOrientation > 4)
         {
             do
             {
                 cout << "PLease enter a valid orientation (1 to 4): ";
                 cin >> shipOrientation;
+                checkInt(shipOrientation);
             } while (shipOrientation < 1 || shipOrientation > 4);
             
         }
@@ -73,6 +97,7 @@ void Executive::placeShips(Board &player)
                 startColIndex = startColIndex - 65;
                 cout << "Starting row index (1 to 10): ";
                 cin >> startRowIndex;
+                checkInt(startRowIndex);
                 startRowIndex--;
 
                 // Orient the ship in the specified direction
@@ -80,6 +105,7 @@ void Executive::placeShips(Board &player)
                 cout << "Up = 1\nDown = 2\nLeft = 3\nRight = 4\n";
                 cout << "Orientation: ";
                 cin >> shipOrientation;
+                checkInt(shipOrientation);
 
             } while (!player.validPlace(startRowIndex, startColIndex, i, shipOrientation));
         }
@@ -103,6 +129,7 @@ void Executive::hitMissile(Board &p1, Board &p2)
     colPos = colPos - 65;
     cout << "Enter the row number (1-10) of the player" << p2.getId() << "'s box you want to attack : ";
     cin >> rowPos;
+    checkInt(rowPos);
     rowPos--;
 
     //Check if the inputs are invalid
@@ -117,6 +144,7 @@ void Executive::hitMissile(Board &p1, Board &p2)
             colPos = colPos - 65;
             cout << "Enter the row number (1-10) of the player" << p2.getId() << "'s box you want to attack : ";
             cin >> rowPos;
+            checkInt(rowPos);
             rowPos--;
             
         } while (!p2.validHit(rowPos, colPos));
