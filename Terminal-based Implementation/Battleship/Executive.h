@@ -14,7 +14,8 @@ private:
     int shipOrientation;
     char colPos;
 	int rowPos;
-
+    //Prints lines to hide other player's board
+    void hideBoards();
 public:
     //Initializes the private members
     Executive();

@@ -26,6 +26,14 @@ Executive::Executive() : player1(1), player2(2)
 {
 }
 
+void Executive::hideBoards()
+{
+    for (int i = 0; i < 50; i++)
+    {
+        cout << "-----------------\n";
+    }
+}
+
 void Executive::takeNumOfShips()
 {
     // Taking and validating number of ships
@@ -118,8 +126,13 @@ void Executive::placeShips(Board &player)
 
 void Executive::hitMissile(Board &p1, Board &p2)
 {
+    hideBoards();
+    cout << "\nPress any key to start player " << p1.getId() << "'s turn...";
+    cin.get();
     cout << "-----------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
     //Print the board without the ships
+    cout << "Your board:\n";
+    p1.printBoardWShip();
     cout << "Enemy's board:\n";
     p2.printBoardWOShip();
     //Ask the user for col and idex nums
@@ -172,7 +185,8 @@ void Executive::hitMissile(Board &p1, Board &p2)
     //temp score location
 	cout << "Score: " << p2.getScore() << '\n';
     //
-    cout << "-----------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
+    cout << "\nPress any key to end turn...";
+    cin.get();
 }
 
 void Executive::run()
@@ -180,19 +194,14 @@ void Executive::run()
     takeNumOfShips();
 
     placeShips(player1);
-    for (int i = 0; i < 50; i++)
-    {
-        cout << "-----------------\n";
-    }
-        
+    cout << "Press any key to end ship placement...";
+    cin.get();
+    hideBoards();
+    
     placeShips(player2);
-    for (int i = 0; i < 50; i++)
-    {
-        cout << "-----------------\n";
-    }
-
-    cout << "Let's destory some ships!" << endl
-         << endl;
+    cout << "Let's destory some ships!" << endl;
+    cout << "Press any key to end ship placement...";
+    cin.get();
 
     do
     {
