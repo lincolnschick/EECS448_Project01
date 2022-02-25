@@ -169,6 +169,8 @@ void Executive::hitMissile(Board &p1, Board &p2)
     //Print the board again after the hit without displaying the ships
     cout << "\nEnemy's updated board:\n";
     p2.printBoardWOShip();
+    //temp score location
+	cout << "Score: " << p2.getScore() << '\n';
     //
     cout << "-----------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
 }

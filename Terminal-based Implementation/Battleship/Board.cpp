@@ -290,6 +290,7 @@ bool Board::shipDestroyed(int i, int j)
 			}
 		}
 	}
+	score += 10 * (shipNum+1);
 	return true;
 }
 
