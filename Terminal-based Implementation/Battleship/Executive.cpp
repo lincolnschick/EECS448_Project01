@@ -1,5 +1,6 @@
 #include "Executive.h"
 #include <iostream>
+#include <limits>
 using namespace std;
 
 //function to check for integer
@@ -127,8 +128,8 @@ void Executive::placeShips(Board &player)
 void Executive::hitMissile(Board &p1, Board &p2)
 {
     hideBoards();
-    cout << "\nPress any key to start player " << p1.getId() << "'s turn...";
-    cin.get();
+    cout << "\nPress enter to start player " << p1.getId() << "'s turn...";
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
     cout << "-----------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
     //Print the board without the ships
     cout << "Your board:\n";
@@ -185,8 +186,8 @@ void Executive::hitMissile(Board &p1, Board &p2)
     //temp score location
 	cout << "Score: " << p2.getScore() << '\n';
     //
-    cout << "\nPress any key to end turn...";
-    cin.get();
+    cout << "\nPress enter to end turn...";
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 
 void Executive::run()
@@ -194,14 +195,14 @@ void Executive::run()
     takeNumOfShips();
 
     placeShips(player1);
-    cout << "Press any key to end ship placement...";
-    cin.get();
+    cout << "Press enter to end ship placement...";
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
     hideBoards();
     
     placeShips(player2);
     cout << "Let's destory some ships!" << endl;
-    cout << "Press any key to end ship placement...";
-    cin.get();
+    cout << "Press enter to end ship placement...";
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
     do
     {
