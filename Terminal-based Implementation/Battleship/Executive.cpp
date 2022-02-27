@@ -167,22 +167,17 @@ void Executive::hitMissile(Board &p1, Board &p2)
     rowPos--;
 
     //Check if the inputs are invalid
-    if(!p2.validHit(rowPos, colPos))
+    //Keep prompting the user to re-enter inputs until the inputs are valids
+    while (!p2.validHit(rowPos, colPos))
     {
-        //Keep prompting the user to re-enter inputs until the inputs are valid
-        do
-        {
-            cout << "Please enter valid row and column: \n";
-            cout << "Enter the column number (A-J) of player" << p2.getId() << "'s box you want to attack : ";
-            cin >> colPos;
-            colPos = colPos - 65;
-            cout << "Enter the row number (1-10) of the player" << p2.getId() << "'s box you want to attack : ";
-            cin >> rowPos;
-            checkInt(rowPos);
-            rowPos--;
-            
-        } while (!p2.validHit(rowPos, colPos));
-        
+        cout << "Please enter valid row and column: \n";
+        cout << "Enter the column number (A-J) of player" << p2.getId() << "'s box you want to attack : ";
+        cin >> colPos;
+        colPos = colPos - 65;
+        cout << "Enter the row number (1-10) of the player" << p2.getId() << "'s box you want to attack : ";
+        cin >> rowPos;
+        checkInt(rowPos);
+        rowPos--;
     }
 
     // If a ship is hit
