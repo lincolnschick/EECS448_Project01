@@ -16,6 +16,8 @@ private:
 	int rowPos;
     //Prints lines to hide other player's board
     void hideBoards();
+    void placeShipsAI();
+    
 public:
     //Initializes the private members
     Executive();

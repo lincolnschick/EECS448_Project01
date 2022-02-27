@@ -1,6 +1,8 @@
 #include "Executive.h"
 #include <iostream>
 #include <limits>
+#include <stdlib.h>
+#include <time.h>
 using namespace std;
 
 //function to check for integer
@@ -125,6 +127,24 @@ void Executive::placeShips(Board &player)
     }
 }
 
+void Executive::placeShipsAI()
+{
+    srand(time(NULL));
+    int startRow = 0, startCol = 0, orientation = 0;
+    for (int i = 1; i <= numOfShips; i++)
+    {
+        do
+        {
+            startRow = rand()%10;
+            startCol = rand()%10;
+            orientation = (rand()%4)+1;
+        } while (!player2.validPlace(startRow, startCol, i, orientation));
+        player2.placeShip(startRow, startCol, i, orientation);
+        // check valid ai placement
+        // player2.printBoardWShip();
+    }
+}
+
 void Executive::hitMissile(Board &p1, Board &p2)
 {
     hideBoards();
@@ -192,23 +212,51 @@ void Executive::hitMissile(Board &p1, Board &p2)
 
 void Executive::run()
 {
+    int modeChoice = 0, difficultyChoice = 0;
     takeNumOfShips();
+    do
+    {
+        cout << "Choose mode:\n";
+        cout << "1) 2 Player\n2) AI\n";
+        cout << "Choice: ";
+        cin >> modeChoice;
+        checkInt(modeChoice);
+    } while (modeChoice < 1 || modeChoice > 2);
+
+    if (modeChoice == 2)
+    {
+        do
+        {
+            cout << "Choose difficulty:\n";
+            cout << "1) Easy\n2) Medium\n3) Hard\n";
+            cout << "Choice: ";
+            cin >> difficultyChoice;
+            checkInt(difficultyChoice);
+        } while (difficultyChoice < 1 || difficultyChoice > 3);
+    }
 
     placeShips(player1);
     cout << "Press enter to end ship placement...";
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
     hideBoards();
     
-    placeShips(player2);
-    cout << "Let's destory some ships!" << endl;
-    cout << "Press enter to end ship placement...";
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
-    do
+    if (modeChoice == 1)
     {
-        hitMissile(player1, player2);
-        hitMissile(player2, player1);
-    } while (!player1.allShipsSunk() && !player2.allShipsSunk());
+        placeShips(player2);
+        cout << "Let's destroy some ships!" << endl;
+        cout << "Press enter to end ship placement...";
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+        do
+        {
+            hitMissile(player1, player2);
+            hitMissile(player2, player1);
+        } while (!player1.allShipsSunk() && !player2.allShipsSunk());
+    }
+    else
+    {
+        placeShipsAI();
+    }
 
     if (player1.allShipsSunk() && !player2.allShipsSunk())
     {
