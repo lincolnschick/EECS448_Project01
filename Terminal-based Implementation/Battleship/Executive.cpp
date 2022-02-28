@@ -145,8 +145,10 @@ void Executive::placeShipsAI()
     }
 }
 
-void Executive::hitMissile(Board &p1, Board &p2)
+void Executive::hitMissile(Board &p1, Board &p2, int mode)
 {
+    //Update opponent for AI and 2 player modes
+    string opponent = mode == 1 ? "player" + to_string(p2.getId()) : "the AI";
     hideBoards();
     cout << "\nPress enter to start player " << p1.getId() << "'s turn...";
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -158,10 +160,10 @@ void Executive::hitMissile(Board &p1, Board &p2)
     p2.printBoardWOShip();
     //Ask the user for col and idex nums
     cout << "Player " << p1.getId() << " play your move: " << endl;
-    cout << "Enter the column number (A-J) of player" << p2.getId() << "'s box you want to attack : ";
+    cout << "Enter the column number (A-J) of " << opponent << "'s box you want to attack : ";
     cin >> colPos;
     colPos = colPos - 65;
-    cout << "Enter the row number (1-10) of the player" << p2.getId() << "'s box you want to attack : ";
+    cout << "Enter the row number (1-10) of " << opponent << "'s box you want to attack : ";
     cin >> rowPos;
     checkInt(rowPos);
     rowPos--;
@@ -171,10 +173,10 @@ void Executive::hitMissile(Board &p1, Board &p2)
     while (!p2.validHit(rowPos, colPos))
     {
         cout << "Please enter valid row and column: \n";
-        cout << "Enter the column number (A-J) of player" << p2.getId() << "'s box you want to attack : ";
+        cout << "Enter the column number (A-J) of " << opponent << "'s box you want to attack : ";
         cin >> colPos;
         colPos = colPos - 65;
-        cout << "Enter the row number (1-10) of the player" << p2.getId() << "'s box you want to attack : ";
+        cout << "Enter the row number (1-10) of " << opponent << "'s box you want to attack : ";
         cin >> rowPos;
         checkInt(rowPos);
         rowPos--;
@@ -203,6 +205,11 @@ void Executive::hitMissile(Board &p1, Board &p2)
     //
     cout << "\nPress enter to end turn...";
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
+}
+
+void Executive::hitMissileAI(Board &p1, int difficulty)
+{
+
 }
 
 void Executive::run()
@@ -244,13 +251,18 @@ void Executive::run()
 
         do
         {
-            hitMissile(player1, player2);
-            hitMissile(player2, player1);
+            hitMissile(player1, player2, modeChoice);
+            hitMissile(player2, player1, modeChoice);
         } while (!player1.allShipsSunk() && !player2.allShipsSunk());
     }
     else
     {
         placeShipsAI();
+        do
+        {
+            hitMissile(player1, player2, modeChoice);
+            hitMissileAI(player1, difficultyChoice);
+        } while (!player1.allShipsSunk() && !player2.allShipsSunk());
     }
 
     if (player1.allShipsSunk() && !player2.allShipsSunk())
