@@ -209,7 +209,26 @@ void Executive::hitMissile(Board &p1, Board &p2, int mode)
 
 void Executive::hitMissileAI(Board &p1, int difficulty)
 {
-
+    srand( time ( NULL ) );
+    int row = 0;
+    int col = 0;
+    bool hasShot = false; 
+    switch( difficulty ){
+        case 1:
+            while ( !hasShot ){
+                row = rand() % 10; 
+                col = rand() % 10;
+                if ( p1.validHit( row, col ) ){
+                    p1.updateBoardHit( row, col );
+                    hasShot = true; 
+                }
+            }
+            break;
+        case 2:
+            break;
+        case 3:
+            break;
+    }
 }
 
 void Executive::run()
