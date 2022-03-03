@@ -350,3 +350,7 @@ void Board::printBoardWShip()
 	}
 	cout << endl;
 }
+
+char Board::getCell( int i, int j ){
+	return ( m_board[ i ][ j ] );
+}

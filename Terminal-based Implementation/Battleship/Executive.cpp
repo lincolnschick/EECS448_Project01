@@ -227,6 +227,17 @@ void Executive::hitMissileAI(Board &p1, int difficulty)
         case 2:
             break;
         case 3:
+            for ( int i = 0 ; i < 10 ; i ++ ){
+                for ( int j = 0 ; j < 10 ; j ++ ){
+                    if ( p1.getCell( i, j ) == 'S' ){
+                        row = i, col = j; 
+                        p1.updateBoardHit( row, col );
+                        hasShot = true;
+                        break;
+                    }
+                    if ( hasShot ){ break; }
+                }
+            }
             break;
     }
 }

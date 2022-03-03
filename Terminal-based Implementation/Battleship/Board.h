@@ -42,6 +42,8 @@ class Board
 		int getId() {return id;}
 		//Returns the score of the player
 		int getScore() {return score;}
+		//Gets the char of the given coords;
+		char getCell( int i, int j );
 
 
 
