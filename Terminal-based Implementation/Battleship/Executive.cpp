@@ -3,6 +3,8 @@
 #include <limits>
 #include <stdlib.h>
 #include <time.h>
+#include <chrono>
+#include <thread>
 using namespace std;
 
 //function to check for integer
@@ -129,6 +131,9 @@ void Executive::placeShips(Board &player)
 
 void Executive::placeShipsAI()
 {
+    cout << "AI's ship placement:\nAI thinking...\n";
+    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+
     srand(time(NULL));
     int startRow = 0, startCol = 0, orientation = 0;
     for (int i = 1; i <= numOfShips; i++)
@@ -143,15 +148,19 @@ void Executive::placeShipsAI()
         // check valid ai placement
         // player2.printBoardWShip();
     }
+    cout << "AI has placed ships\n";
 }
 
 void Executive::hitMissile(Board &p1, Board &p2, int mode)
 {
     //Update opponent for AI and 2 player modes
     string opponent = mode == 1 ? "player" + to_string(p2.getId()) : "the AI";
-    hideBoards();
-    cout << "\nPress enter to start player " << p1.getId() << "'s turn...";
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    if (mode == 1)
+    {
+        hideBoards();
+        cout << "\nPress enter to start player " << p1.getId() << "'s turn...";
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
     cout << "-----------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
     //Print the board without the ships
     cout << "Your board:\n";
@@ -209,10 +218,14 @@ void Executive::hitMissile(Board &p1, Board &p2, int mode)
 
 void Executive::hitMissileAI(Board &p1, int difficulty)
 {
+    cout << "-----------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
     srand( time ( NULL ) );
     int row = 0;
     int col = 0;
-    bool hasShot = false; 
+    bool hasShot = false;
+    cout << "AI's turn:\n";
+    cout << "AI thinking...\n";
+    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
     switch( difficulty ){
         case 1:
             while ( !hasShot ){
@@ -240,6 +253,7 @@ void Executive::hitMissileAI(Board &p1, int difficulty)
             }
             break;
     }
+    cout << "AI fired\n";
 }
 
 void Executive::run()
@@ -270,10 +284,10 @@ void Executive::run()
     placeShips(player1);
     cout << "Press enter to end ship placement...";
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
-    hideBoards();
     
     if (modeChoice == 1)
     {
+        hideBoards();
         placeShips(player2);
         cout << "Let's destroy some ships!" << endl;
         cout << "Press enter to end ship placement...";
@@ -287,6 +301,7 @@ void Executive::run()
     }
     else
     {
+        cout << "-----------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
         placeShipsAI();
         do
         {
