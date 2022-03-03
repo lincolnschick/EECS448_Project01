@@ -219,13 +219,15 @@ void Executive::hitMissile(Board &p1, Board &p2, int mode)
 void Executive::hitMissileAI(Board &p1, int difficulty)
 {
     cout << "-----------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
+    cout << "AI's turn:\n";
+    cout << "AI thinking...\n";
+    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+
     srand( time ( NULL ) );
     int row = 0;
     int col = 0;
     bool hasShot = false;
-    cout << "AI's turn:\n";
-    cout << "AI thinking...\n";
-    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+    
     switch( difficulty ){
         case 1:
             while ( !hasShot ){
