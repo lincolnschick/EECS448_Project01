@@ -224,6 +224,7 @@ void Executive::hitMissileAI(Board &p1, int difficulty)
     cout << "AI thinking...\n";
     std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 
+    //Initializes everything needed
     srand( time ( NULL ) );
     int row = 0;
     int col = 0;
@@ -266,6 +267,7 @@ void Executive::printWinners(Board& p1, Board& p2, int mode)
 {
     //Print AI instead of Player 2 for AI mode
     string opponent2 = mode == 1 ? "Player 2" : "The AI";
+    //Winning conditions
     if (p1.allShipsSunk() && !p2.allShipsSunk())
     {
         cout << opponent2 << " has won!" << endl;
@@ -286,6 +288,7 @@ bool Executive::isGameOver(Board& p1, Board& p2)
 //Runs everything
 void Executive::run()
 {
+    //Player makes a choice
     int modeChoice = 0, difficultyChoice = 0;
     takeNumOfShips();
     do
@@ -297,6 +300,7 @@ void Executive::run()
         checkInt(modeChoice);
     } while (modeChoice < 1 || modeChoice > 2);
 
+    //AI choice
     if (modeChoice == 2)
     {
         do
@@ -309,10 +313,12 @@ void Executive::run()
         } while (difficultyChoice < 1 || difficultyChoice > 3);
     }
 
+    //Player1 places ships
     placeShips(player1);
     cout << "Press enter to end ship placement...";
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
     
+    //Player 2 places ship if chosen
     if (modeChoice == 1)
     {
         hideBoards();
@@ -321,6 +327,7 @@ void Executive::run()
         cout << "Press enter to end ship placement...";
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
+        //Goes through the firing between players until a player wins
         do
         {
             hitMissile(player1, player2, modeChoice);
@@ -330,6 +337,7 @@ void Executive::run()
             hitMissile(player2, player1, modeChoice);
         } while (!isGameOver(player1, player2));
     }
+    //AI firing
     else
     {
         cout << "-----------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
