@@ -216,6 +216,7 @@ void Executive::hitMissile(Board &p1, Board &p2, int mode)
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 
+//Depending on the difficulty inserted, it will adjusts accordingly 
 void Executive::hitMissileAI(Board &p1, int difficulty)
 {
     cout << "-----------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
@@ -229,6 +230,7 @@ void Executive::hitMissileAI(Board &p1, int difficulty)
     bool hasShot = false;
     
     switch( difficulty ){
+        //Easy difficulty
         case 1:
             while ( !hasShot ){
                 row = rand() % 10; 
@@ -239,8 +241,10 @@ void Executive::hitMissileAI(Board &p1, int difficulty)
                 }
             }
             break;
+        //Medium difficulty
         case 2:
             break;
+        //Hard difficulty
         case 3:
             for ( int i = 0 ; i < 10 ; i ++ ){
                 for ( int j = 0 ; j < 10 ; j ++ ){
@@ -258,6 +262,7 @@ void Executive::hitMissileAI(Board &p1, int difficulty)
     cout << "AI fired\n";
 }
 
+//Runs everything
 void Executive::run()
 {
     int modeChoice = 0, difficultyChoice = 0;
