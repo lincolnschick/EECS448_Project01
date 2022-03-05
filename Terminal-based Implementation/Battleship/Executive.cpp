@@ -257,7 +257,7 @@ void Executive::hitMissileAI(Board &p1, int difficulty)
                 midRow = row;
                 midCol = col;
                 up = true, down = false, left = false, right = false;
-                if (p1.getCell(row, col) == 'X') hit = true;
+                if (p1.getCell(row, col) == 'X' && !p1.shipDestroyed(row, col)) hit = true;
             }
             else
             {
