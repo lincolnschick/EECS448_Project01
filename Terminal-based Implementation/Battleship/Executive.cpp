@@ -231,6 +231,7 @@ pair<int, int> randomHit(Board &p1)
     }
 }
 
+//Depending on the difficulty inserted, it will adjusts accordingly 
 void Executive::hitMissileAI(Board &p1, int difficulty)
 {
     cout << "-----------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
@@ -242,9 +243,11 @@ void Executive::hitMissileAI(Board &p1, int difficulty)
     static int row = 0, col = 0, midRow = 0, midCol = 0;
     static bool up, down, left, right;
     switch( difficulty ){
+        //Easy difficulty
         case 1:
             randomHit(p1);
             break;
+        //Medium difficulty
         case 2:
             if (!hit)
             {
@@ -330,6 +333,7 @@ void Executive::hitMissileAI(Board &p1, int difficulty)
                 }
             }
             break;
+        //Hard difficulty
         case 3:
             for ( int i = 0 ; i < 10 ; i ++ ){
                 for ( int j = 0 ; j < 10 ; j ++ ){
@@ -346,8 +350,32 @@ void Executive::hitMissileAI(Board &p1, int difficulty)
     cout << "AI fired\n";
 }
 
+void Executive::printWinners(Board& p1, Board& p2, int mode)
+{
+    //Print AI instead of Player 2 for AI mode
+    string opponent2 = mode == 1 ? "Player 2" : "The AI";
+    //Winning conditions
+    if (p1.allShipsSunk() && !p2.allShipsSunk())
+    {
+        cout << opponent2 << " has won!" << endl;
+    }
+
+    else
+    {
+        cout << "Player 1 has won!" << endl;
+    }
+}
+
+bool Executive::isGameOver(Board& p1, Board& p2)
+{
+    return (player1.allShipsSunk() || player2.allShipsSunk());
+}
+
+
+//Runs everything
 void Executive::run()
 {
+    //Player makes a choice
     int modeChoice = 0, difficultyChoice = 0;
     takeNumOfShips();
     do
@@ -359,6 +387,7 @@ void Executive::run()
         checkInt(modeChoice);
     } while (modeChoice < 1 || modeChoice > 2);
 
+    //AI choice
     if (modeChoice == 2)
     {
         do
@@ -371,10 +400,12 @@ void Executive::run()
         } while (difficultyChoice < 1 || difficultyChoice > 3);
     }
 
+    //Player1 places ships
     placeShips(player1);
     cout << "Press enter to end ship placement...";
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
     
+    //Player 2 places ship if chosen
     if (modeChoice == 1)
     {
         hideBoards();
@@ -383,12 +414,17 @@ void Executive::run()
         cout << "Press enter to end ship placement...";
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
+        //Goes through the firing between players until a player wins
         do
         {
             hitMissile(player1, player2, modeChoice);
+            //Exit loop if game is over
+            if (isGameOver(player1, player2))
+                break;
             hitMissile(player2, player1, modeChoice);
-        } while (!player1.allShipsSunk() && !player2.allShipsSunk());
+        } while (!isGameOver(player1, player2));
     }
+    //AI firing
     else
     {
         cout << "-----------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
@@ -396,22 +432,11 @@ void Executive::run()
         do
         {
             hitMissile(player1, player2, modeChoice);
+            //Exit loop if game is over
+            if (isGameOver(player1, player2))
+                break;
             hitMissileAI(player1, difficultyChoice);
-        } while (!player1.allShipsSunk() && !player2.allShipsSunk());
+        } while (!isGameOver(player1, player2));
     }
-
-    if (player1.allShipsSunk() && !player2.allShipsSunk())
-    {
-        cout << "Player 2 has won!" << endl;
-    }
-
-    else if (player2.allShipsSunk() && !player1.allShipsSunk())
-    {
-        cout << "Player 1 has won!" << endl;
-    }
-
-    else
-    {
-        cout << "It is a draw!" << endl;
-    }
+    printWinners(player1, player2, modeChoice);
 }

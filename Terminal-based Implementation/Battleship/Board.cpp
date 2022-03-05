@@ -294,6 +294,7 @@ bool Board::shipDestroyed(int i, int j)
 	return true;
 }
 
+//Prints the board without the ships
 void Board::printBoardWOShip()
 {
 	int row = 01;
@@ -327,6 +328,7 @@ void Board::printBoardWOShip()
 	cout << endl;
 }
 
+//Prints the board with the ships
 void Board::printBoardWShip()
 {
 	int row = 01;
@@ -351,6 +353,7 @@ void Board::printBoardWShip()
 	cout << endl;
 }
 
+//Just returns the char of the cell given
 char Board::getCell( int i, int j ){
 	return ( m_board[ i ][ j ] );
 }
