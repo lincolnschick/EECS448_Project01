@@ -273,7 +273,7 @@ void Executive::printWinners(Board& p1, Board& p2, int mode)
         cout << opponent2 << " has won!" << endl;
     }
 
-    else (p2.allShipsSunk() && !p1.allShipsSunk())
+    else
     {
         cout << "Player 1 has won!" << endl;
     }
