@@ -216,37 +216,125 @@ void Executive::hitMissile(Board &p1, Board &p2, int mode)
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 
+pair<int, int> randomHit(Board &p1)
+{
+    int row = 0;
+    int col = 0;
+    srand( time ( NULL ) );
+    while ( 1 ){
+        row = rand() % 10; 
+        col = rand() % 10;
+        if ( p1.validHit( row, col ) ){
+            p1.updateBoardHit( row, col );
+            return make_pair(row, col);
+        }
+    }
+}
+
 void Executive::hitMissileAI(Board &p1, int difficulty)
 {
     cout << "-----------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
     cout << "AI's turn:\n";
     cout << "AI thinking...\n";
     std::this_thread::sleep_for(std::chrono::milliseconds(2000));
-
-    srand( time ( NULL ) );
-    int row = 0;
-    int col = 0;
     bool hasShot = false;
-    
+    static bool hit = false;
+    static int row = 0, col = 0, midRow = 0, midCol = 0;
+    static bool up, down, left, right;
     switch( difficulty ){
         case 1:
-            while ( !hasShot ){
-                row = rand() % 10; 
-                col = rand() % 10;
-                if ( p1.validHit( row, col ) ){
-                    p1.updateBoardHit( row, col );
-                    hasShot = true; 
-                }
-            }
+            randomHit(p1);
             break;
         case 2:
+            if (!hit)
+            {
+                pair<int, int> coor = randomHit(p1);
+                row = coor.first;
+                col = coor.second;
+                midRow = row;
+                midCol = col;
+                up = true, down = false, left = false, right = false;
+                if (p1.getCell(row, col) == 'X') hit = true;
+            }
+            else
+            {
+                cout << up << down << left << right << '\n';
+                if (up)
+                {
+                    cout << "here\n";
+                    if (p1.validHit(row-1, col))
+                    {
+                        row = row - 1;
+                        p1.updateBoardHit(row, col);
+                        if (p1.getCell(row, col) == 'X' && p1.shipDestroyed(row, col)) hit = false;
+                        cout << "hit: " << hit << p1.shipDestroyed(row , col) << '\n';
+                    }
+                    else
+                    {
+                        up = false;
+                        down = true;
+                        row = midRow;
+                    }
+                }
+                if (down)
+                {
+                    if (p1.validHit(row+1, col))
+                    {
+                        row = row + 1;
+                        p1.updateBoardHit(row, col);
+                        if (p1.getCell(row, col) == 'X' && p1.shipDestroyed(row, col)) hit = false;
+                    }
+                    else
+                    {
+                        down = false;
+                        left = true;
+                        row = midRow;
+                    }
+                }
+                if (left)
+                {
+                    if (p1.validHit(row, col-1))
+                    {
+                        col = col - 1;
+                        p1.updateBoardHit(row, col);
+                        if (p1.getCell(row, col) == 'X' && p1.shipDestroyed(row, col)) hit = false;
+                    }
+                    else
+                    {
+                        left = false;
+                        right = true;
+                        col = midCol;
+                    }
+                }
+                if (right)
+                {
+                    if (p1.validHit(row, col+1))
+                    {
+                        col = col + 1;
+                        p1.updateBoardHit(row, col);
+                        if (p1.getCell(row, col) == 'X' && p1.shipDestroyed(row, col)) hit = false;
+                    }
+                }
+                cout << row << ' ' << col << '\n';
+                if (p1.getCell(row, col) == 'M')
+                {
+                    cout << up << down << left << right << '\n';
+                    if (up) {down = true, up = false;}
+                    else if (down) {left = true, down = false;}
+                    else if (left) {right = true, left = false;}
+                    row = midRow;
+                    col = midCol;
+                    cout << row << col <<'\n';
+                    cout << up << down << left << right << '\n';
+                    cout << "hit: " << hit << '\n';
+                }
+            }
             break;
         case 3:
             for ( int i = 0 ; i < 10 ; i ++ ){
                 for ( int j = 0 ; j < 10 ; j ++ ){
                     if ( p1.getCell( i, j ) == 'S' ){
-                        row = i, col = j; 
-                        p1.updateBoardHit( row, col );
+                        p1.updateBoardHit( i, j );
                         hasShot = true;
                         break;
                     }

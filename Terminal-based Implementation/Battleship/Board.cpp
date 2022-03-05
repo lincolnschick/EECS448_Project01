@@ -134,7 +134,6 @@ bool Board::validHit(int i, int j)
 		return false;
 	}
 	
-	score++;
 	return true;
 	
 }
@@ -244,6 +243,7 @@ bool Board::updateBoardHit(int i, int j)
 	//If there is a ship, then display X for hit
 	else
 	{
+		score++;
 		m_board[i][j] = 'X';
 		return true;
 	}
