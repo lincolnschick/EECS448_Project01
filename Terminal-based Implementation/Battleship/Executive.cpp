@@ -262,6 +262,27 @@ void Executive::hitMissileAI(Board &p1, int difficulty)
     cout << "AI fired\n";
 }
 
+void Executive::printWinners(Board& p1, Board& p2, int mode)
+{
+    //Print AI instead of Player 2 for AI mode
+    string opponent2 = mode == 1 ? "Player 2" : "The AI";
+    if (p1.allShipsSunk() && !p2.allShipsSunk())
+    {
+        cout << opponent2 << " has won!" << endl;
+    }
+
+    else (p2.allShipsSunk() && !p1.allShipsSunk())
+    {
+        cout << "Player 1 has won!" << endl;
+    }
+}
+
+bool Executive::isGameOver(Board& p1, Board& p2)
+{
+    return (player1.allShipsSunk() || player2.allShipsSunk());
+}
+
+
 //Runs everything
 void Executive::run()
 {
@@ -303,8 +324,11 @@ void Executive::run()
         do
         {
             hitMissile(player1, player2, modeChoice);
+            //Exit loop if game is over
+            if (isGameOver(player1, player2))
+                break;
             hitMissile(player2, player1, modeChoice);
-        } while (!player1.allShipsSunk() && !player2.allShipsSunk());
+        } while (!isGameOver(player1, player2));
     }
     else
     {
@@ -313,22 +337,11 @@ void Executive::run()
         do
         {
             hitMissile(player1, player2, modeChoice);
+            //Exit loop if game is over
+            if (isGameOver(player1, player2))
+                break;
             hitMissileAI(player1, difficultyChoice);
-        } while (!player1.allShipsSunk() && !player2.allShipsSunk());
+        } while (!isGameOver(player1, player2));
     }
-
-    if (player1.allShipsSunk() && !player2.allShipsSunk())
-    {
-        cout << "Player 2 has won!" << endl;
-    }
-
-    else if (player2.allShipsSunk() && !player1.allShipsSunk())
-    {
-        cout << "Player 1 has won!" << endl;
-    }
-
-    else
-    {
-        cout << "It is a draw!" << endl;
-    }
+    printWinners(player1, player2, modeChoice);
 }

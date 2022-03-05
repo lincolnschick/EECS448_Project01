@@ -19,6 +19,10 @@ private:
     void placeShipsAI();
     //Handles AI hitting boards and updating arrays
     void hitMissileAI(Board &p1, int difficulty);
+    //Prints the winner(s)
+    void printWinners(Board& p1, Board& p2, int mode);
+    //Returns if the game is over
+    bool isGameOver(Board& p1, Board& p2);
     
 public:
     //Initializes the private members
