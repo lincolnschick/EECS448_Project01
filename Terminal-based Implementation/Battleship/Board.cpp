@@ -253,13 +253,17 @@ bool Board::updateBoardHit(int i, int j)
 	}
 }
 
+//Returns coordinate pairs of hits of ships yet to be sunk
 vector< pair<int, int> > Board::getHits()
 {
+	//Initialize vector to store hits
 	vector< pair<int, int> > hits;
+	//Iterate through whole board looking for hits (not sunk ships)
 	for (int i = 0; i < m_rows; i++)
 	{
 		for (int j = 0; j < m_cols; j++)
 		{
+			//If an H is found, add its pair to the vector
 			if (m_board[i][j] == 'H')
 			{
 				hits.push_back(make_pair(i, j));
@@ -285,10 +289,9 @@ void Board::updateDestroyedShip(int i, int j)
 	 // Ship oriented horizontally
 	if (shipIStart[shipNum] == shipIEnd[shipNum])
 	{
-		//Check if there still is any S left for that ship
+		//Mark all ship cells as X's for sunk
 		for (int z = shipJStart[shipNum]; z <= shipJEnd[shipNum]; z++)
 		{
-			//If an S is found, the whole ship hasn't been sunk
 			m_board[i][z] = 'X';
 		}
 	}
@@ -296,10 +299,9 @@ void Board::updateDestroyedShip(int i, int j)
 	// Ship oriented vertically
 	else if (shipJStart[shipNum] == shipJEnd[shipNum]) 
 	{
-		//Check if there still is any S left for that ship
+		//Mark all ship cells as X's for sunk
 		for (int z = shipIStart[shipNum]; z <= shipIEnd[shipNum]; z++)
 		{
-			//If an S is found, the whole ship hasn't been sunk
 			m_board[z][j] = 'X';
 		}
 	}
