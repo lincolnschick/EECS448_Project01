@@ -249,7 +249,9 @@ void Executive::hitMissileAI(Board &p1, int difficulty)
             break;
         //Medium difficulty
         case 2:
-            if (!hit)
+        {
+            vector< pair<int, int> > hits = p1.getHits();
+            if (!hit && hits.empty())
             {
                 pair<int, int> coor = randomHit(p1);
                 row = coor.first;
@@ -257,29 +259,31 @@ void Executive::hitMissileAI(Board &p1, int difficulty)
                 midRow = row;
                 midCol = col;
                 up = true, down = false, left = false, right = false;
-                if (p1.getCell(row, col) == 'X' && !p1.shipDestroyed(row, col)) hit = true;
+                if (p1.getCell(row, col) == 'H') hit = true;
             }
             else
             {
+                if (!hit)
+                {
+                    pair<int, int> currentHit = hits.front();
+                    row = currentHit.first;
+                    col = currentHit.second;
+                    midRow = row;
+                    midCol = col;
+                    up = true, down = false, left = false, right = false;
+                    hit = true;
+                }
                 if (up)
                 {
-                    if (row - 1 >= 0 && p1.getCell(row-1, col) != 'M')
+                    row = row - 1;
+                    while (row > 0 && p1.getCell(row, col) == 'H')
                     {
-                        do
-                        {
-                            row = row - 1;
-                        } while (p1.getCell(row, col) == 'X' && row > 0);
-                        if (p1.validHit(row, col))
-                        {
-                            p1.updateBoardHit(row, col);
-                            if (p1.getCell(row, col) == 'X' && p1.shipDestroyed(row, col)) hit = false;
-                        }
-                        else
-                        {
-                            up = false;
-                            down = true;
-                            row = midRow;
-                        }
+                        row = row - 1;
+                    }
+                    if (p1.validHit(row, col))
+                    {
+                        p1.updateBoardHit(row, col);
+                        if (p1.getCell(row, col) == 'X') hit = false;
                     }
                     else
                     {
@@ -290,76 +294,57 @@ void Executive::hitMissileAI(Board &p1, int difficulty)
                 }
                 if (down)
                 {
-                    if (row + 1 <= 9 && p1.getCell(row+1, col) != 'M')
+                    row = row + 1;
+                    while (row < 9 && p1.getCell(row, col) == 'H')
                     {
-                        do
-                        {
-                            row = row + 1;
-                        } while (p1.getCell(row, col) == 'X' && row < 9);
-                        if (p1.validHit(row, col))
-                        {
-                            p1.updateBoardHit(row, col);
-                            if (p1.getCell(row, col) == 'X' && p1.shipDestroyed(row, col)) hit = false;               
-                        }
-                        else
-                        {
-                            up = false;
-                            down = true;
-                            row = midRow;
-                        }
+                        row = row + 1;
+                    }
+                    if (p1.validHit(row, col))
+                    {
+                        p1.updateBoardHit(row, col);
+                        if (p1.getCell(row, col) == 'X') hit = false;
                     }
                     else
                     {
-                        up = false;
-                        down = true;
+                        down = false;
+                        left = true;
                         row = midRow;
                     }
                 }
                 if (left)
                 {
-                    if (col - 1 >= 0 && p1.getCell(row, col-1) != 'M')
+                    col = col - 1;
+                    while (col > 0 && p1.getCell(row, col) == 'H')
                     {
-                        do
-                        {
-                            col = col - 1;
-                        } while (p1.getCell(row, col) == 'X' && col > 0);
-                        if (p1.validHit(row, col))
-                        {
-                            p1.updateBoardHit(row, col);
-                            if (p1.getCell(row, col) == 'X' && p1.shipDestroyed(row, col)) hit = false;
-                        }
-                        else
-                        {
-                            up = false;
-                            down = true;
-                            col = midCol;
-                        }
+                        col = col - 1;
+                    }
+                    if (p1.validHit(row, col))
+                    {
+                        p1.updateBoardHit(row, col);
+                        if (p1.getCell(row, col) == 'X') hit = false;
                     }
                     else
                     {
-                        up = false;
-                        down = true;
+                        left = false;
+                        right = true;
                         col = midCol;
                     }
                 }
                 if (right)
                 {
-                    if (col + 1 <= 9 && p1.getCell(row, col+1) != 'M')
+                    col = col + 1;
+                    while (col < 9 && p1.getCell(row, col) == 'H')
                     {
-                        do
-                        {
-                            col = col + 1;
-                        } while (p1.getCell(row, col) == 'X' && col < 9);
-                        if (p1.validHit(row, col))
-                        {
-                            p1.updateBoardHit(row, col);
-                            if (p1.getCell(row, col) == 'X' && p1.shipDestroyed(row, col)) hit = false;
-                        }
+                        col = col + 1;
+                    }
+                    if (p1.validHit(row, col))
+                    {
+                        p1.updateBoardHit(row, col);
+                        if (p1.getCell(row, col) == 'X') hit = false;
                     }
                 }
                 if (p1.getCell(row, col) == 'M')
                 {
-                    cout << up << down << left << right << '\n';
                     if (up) {down = true, up = false;}
                     else if (down) {left = true, down = false;}
                     else if (left) {right = true, left = false;}
@@ -368,6 +353,7 @@ void Executive::hitMissileAI(Board &p1, int difficulty)
                 }
             }
             break;
+        }
         //Hard difficulty
         case 3:
             for ( int i = 0 ; i < 10 ; i ++ ){

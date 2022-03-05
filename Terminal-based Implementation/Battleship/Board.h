@@ -25,6 +25,8 @@ class Board
 		//Deallocates the 2D array
 		~Board();
 		bool validPlace(int i, int j, int length, int orientation);
+		void updateDestroyedShip(int i, int j);
+		vector< pair<int, int> > getHits();
 		bool validHit(int i, int j);
 		//Places all the S for a ship on the array,	doesn't check for valid input	
 		void placeShip(int i, int j, int length, int orientation);

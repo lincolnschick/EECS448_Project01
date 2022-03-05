@@ -129,7 +129,7 @@ bool Board::validHit(int i, int j)
 		return false;
 	}
 	//If hitting at a spot that has already been hit
-	if (m_board[i][j] == 'X' || m_board[i][j] == 'M' )
+	if (m_board[i][j] == 'X' || m_board[i][j] == 'M' || m_board[i][j] == 'H')
 	{
 		return false;
 	}
@@ -244,8 +244,64 @@ bool Board::updateBoardHit(int i, int j)
 	else
 	{
 		score++;
-		m_board[i][j] = 'X';
+		m_board[i][j] = 'H';
+		if (shipDestroyed(i, j))
+		{
+			updateDestroyedShip(i, j);
+		}
 		return true;
+	}
+}
+
+vector< pair<int, int> > Board::getHits()
+{
+	vector< pair<int, int> > hits;
+	for (int i = 0; i < m_rows; i++)
+	{
+		for (int j = 0; j < m_cols; j++)
+		{
+			if (m_board[i][j] == 'H')
+			{
+				hits.push_back(make_pair(i, j));
+			}
+		}
+	}
+	return hits;
+}
+
+void Board::updateDestroyedShip(int i, int j)
+{
+	//Check which ship has been hit, the indexes of the vector is the ship# (0-4)
+	int shipNum = 0;
+	for (int z = 0; z < shipIStart.size(); z++)
+	{
+		if (i >= shipIStart[z] && i <= shipIEnd[z] && j >= shipJStart[z] && j <= shipJEnd[z])
+		{
+			//Now we know which ship has been hit, and we can use it below to check if the whole ship has been sunk
+			shipNum = z;
+		}
+	}
+
+	 // Ship oriented horizontally
+	if (shipIStart[shipNum] == shipIEnd[shipNum])
+	{
+		//Check if there still is any S left for that ship
+		for (int z = shipJStart[shipNum]; z <= shipJEnd[shipNum]; z++)
+		{
+			//If an S is found, the whole ship hasn't been sunk
+			m_board[i][z] = 'X';
+		}
+	}
+
+	// Ship oriented vertically
+	else if (shipJStart[shipNum] == shipJEnd[shipNum]) 
+	{
+		//Check if there still is any S left for that ship
+		for (int z = shipIStart[shipNum]; z <= shipIEnd[shipNum]; z++)
+		{
+			//If an S is found, the whole ship hasn't been sunk
+			m_board[z][j] = 'X';
+		}
 	}
 }
 
