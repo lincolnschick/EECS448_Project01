@@ -261,16 +261,16 @@ void Executive::hitMissileAI(Board &p1, int difficulty)
             }
             else
             {
-                cout << up << down << left << right << '\n';
                 if (up)
                 {
-                    cout << "here\n";
-                    if (p1.validHit(row-1, col))
+                    if (row - 1 >= 0 && p1.getCell(row-1, col) != 'M')
                     {
-                        row = row - 1;
+                        do
+                        {
+                            row = row - 1;
+                        } while (p1.getCell(row, col) == 'X' && row > 0);
                         p1.updateBoardHit(row, col);
                         if (p1.getCell(row, col) == 'X' && p1.shipDestroyed(row, col)) hit = false;
-                        cout << "hit: " << hit << p1.shipDestroyed(row , col) << '\n';
                     }
                     else
                     {
@@ -281,44 +281,52 @@ void Executive::hitMissileAI(Board &p1, int difficulty)
                 }
                 if (down)
                 {
-                    if (p1.validHit(row+1, col))
+                    if (row + 1 <= 9 && p1.getCell(row+1, col) != 'M')
                     {
-                        row = row + 1;
+                        do
+                        {
+                            row = row + 1;
+                        } while (p1.getCell(row, col) == 'X' && row < 9);
                         p1.updateBoardHit(row, col);
                         if (p1.getCell(row, col) == 'X' && p1.shipDestroyed(row, col)) hit = false;
                     }
                     else
                     {
-                        down = false;
-                        left = true;
+                        up = false;
+                        down = true;
                         row = midRow;
                     }
                 }
                 if (left)
                 {
-                    if (p1.validHit(row, col-1))
+                    if (col - 1 >= 0 && p1.getCell(row, col-1) != 'M')
                     {
-                        col = col - 1;
+                        do
+                        {
+                            col = col - 1;
+                        } while (p1.getCell(row, col) == 'X' && col > 0);
                         p1.updateBoardHit(row, col);
                         if (p1.getCell(row, col) == 'X' && p1.shipDestroyed(row, col)) hit = false;
                     }
                     else
                     {
-                        left = false;
-                        right = true;
+                        up = false;
+                        down = true;
                         col = midCol;
                     }
                 }
                 if (right)
                 {
-                    if (p1.validHit(row, col+1))
+                    if (col + 1 <= 9 && p1.getCell(row, col+1) != 'M')
                     {
-                        col = col + 1;
+                        do
+                        {
+                            col = col + 1;
+                        } while (p1.getCell(row, col) == 'X' && col < 9);
                         p1.updateBoardHit(row, col);
                         if (p1.getCell(row, col) == 'X' && p1.shipDestroyed(row, col)) hit = false;
                     }
                 }
-                cout << row << ' ' << col << '\n';
                 if (p1.getCell(row, col) == 'M')
                 {
                     cout << up << down << left << right << '\n';
@@ -327,9 +335,6 @@ void Executive::hitMissileAI(Board &p1, int difficulty)
                     else if (left) {right = true, left = false;}
                     row = midRow;
                     col = midCol;
-                    cout << row << col <<'\n';
-                    cout << up << down << left << right << '\n';
-                    cout << "hit: " << hit << '\n';
                 }
             }
             break;
