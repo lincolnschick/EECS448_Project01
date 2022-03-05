@@ -216,7 +216,7 @@ void Executive::hitMissile(Board &p1, Board &p2, int mode)
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 
-pair<int, int> randomHit(Board &p1)
+pair<int, int> Executive::randomHit(Board &p1)
 {
     int row = 0;
     int col = 0;
@@ -269,8 +269,17 @@ void Executive::hitMissileAI(Board &p1, int difficulty)
                         {
                             row = row - 1;
                         } while (p1.getCell(row, col) == 'X' && row > 0);
-                        p1.updateBoardHit(row, col);
-                        if (p1.getCell(row, col) == 'X' && p1.shipDestroyed(row, col)) hit = false;
+                        if (p1.validHit(row, col))
+                        {
+                            p1.updateBoardHit(row, col);
+                            if (p1.getCell(row, col) == 'X' && p1.shipDestroyed(row, col)) hit = false;
+                        }
+                        else
+                        {
+                            up = false;
+                            down = true;
+                            row = midRow;
+                        }
                     }
                     else
                     {
@@ -287,8 +296,17 @@ void Executive::hitMissileAI(Board &p1, int difficulty)
                         {
                             row = row + 1;
                         } while (p1.getCell(row, col) == 'X' && row < 9);
-                        p1.updateBoardHit(row, col);
-                        if (p1.getCell(row, col) == 'X' && p1.shipDestroyed(row, col)) hit = false;
+                        if (p1.validHit(row, col))
+                        {
+                            p1.updateBoardHit(row, col);
+                            if (p1.getCell(row, col) == 'X' && p1.shipDestroyed(row, col)) hit = false;               
+                        }
+                        else
+                        {
+                            up = false;
+                            down = true;
+                            row = midRow;
+                        }
                     }
                     else
                     {
@@ -305,8 +323,17 @@ void Executive::hitMissileAI(Board &p1, int difficulty)
                         {
                             col = col - 1;
                         } while (p1.getCell(row, col) == 'X' && col > 0);
-                        p1.updateBoardHit(row, col);
-                        if (p1.getCell(row, col) == 'X' && p1.shipDestroyed(row, col)) hit = false;
+                        if (p1.validHit(row, col))
+                        {
+                            p1.updateBoardHit(row, col);
+                            if (p1.getCell(row, col) == 'X' && p1.shipDestroyed(row, col)) hit = false;
+                        }
+                        else
+                        {
+                            up = false;
+                            down = true;
+                            col = midCol;
+                        }
                     }
                     else
                     {
@@ -323,8 +350,11 @@ void Executive::hitMissileAI(Board &p1, int difficulty)
                         {
                             col = col + 1;
                         } while (p1.getCell(row, col) == 'X' && col < 9);
-                        p1.updateBoardHit(row, col);
-                        if (p1.getCell(row, col) == 'X' && p1.shipDestroyed(row, col)) hit = false;
+                        if (p1.validHit(row, col))
+                        {
+                            p1.updateBoardHit(row, col);
+                            if (p1.getCell(row, col) == 'X' && p1.shipDestroyed(row, col)) hit = false;
+                        }
                     }
                 }
                 if (p1.getCell(row, col) == 'M')

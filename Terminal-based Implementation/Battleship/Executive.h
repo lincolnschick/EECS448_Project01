@@ -23,6 +23,7 @@ private:
     void printWinners(Board& p1, Board& p2, int mode);
     //Returns if the game is over
     bool isGameOver(Board& p1, Board& p2);
+    pair<int, int> randomHit(Board &p1);
     
 public:
     //Initializes the private members
