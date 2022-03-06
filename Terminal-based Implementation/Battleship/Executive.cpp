@@ -125,6 +125,8 @@ void Executive::placeShips(Board &player)
         }
         //After filtering through the bad input, once the input is valid, place the ships on the board
         player.placeShip(startRowIndex, startColIndex, i, shipOrientation);
+        //Play ship placement sound
+        system("afplay ../sounds/shipPlace.wav");
         //Print the board with the ships so the player can see his own ship placement
         player.printBoardWShip();
     }
@@ -195,7 +197,8 @@ void Executive::hitMissile(Board &p1, Board &p2, int mode)
         checkInt(rowPos);
         rowPos--;
     }
-
+    //Play firing sound
+    system("afplay ../sounds/fireSound.wav");
     // If a ship is hit
     if (p2.updateBoardHit(rowPos, colPos) == true)
     {
@@ -205,11 +208,15 @@ void Executive::hitMissile(Board &p1, Board &p2, int mode)
         {
             cout << "Enemy ship destroyed.\n";
         }
+        //Play explosion sound after ship hit
+        system("afplay ../sounds/explosion.wav");
     }
     //If it is a miss
     else
     {
         cout << "Hit Missed.\n";
+        //Play splash sound for miss
+        system("afplay ../sounds/splash.wav");
     }
     //Print the board again after the hit without displaying the ships
     cout << "\nEnemy's updated board:\n";
@@ -446,6 +453,8 @@ void Executive::run()
             cin >> difficultyChoice;
             checkInt(difficultyChoice);
         } while (difficultyChoice < 1 || difficultyChoice > 3);
+        //Play intro sound at game start
+        system("afplay ../sounds/intro.wav");
     }
 
     //Player1 places ships
@@ -461,7 +470,8 @@ void Executive::run()
         cout << "Let's destroy some ships!" << endl;
         cout << "Press enter to end ship placement...";
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
+        //Play intro sound
+        system("afplay ../sounds/intro.wav");
         //Goes through the firing between players until a player wins
         do
         {
@@ -487,4 +497,6 @@ void Executive::run()
         } while (!isGameOver(player1, player2));
     }
     printWinners(player1, player2, modeChoice);
+    //Play a victory sound to celebrate the winner(s)
+    system("afplay ../sounds/victory.wav");
 }
