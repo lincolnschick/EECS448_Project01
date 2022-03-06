@@ -152,8 +152,6 @@ void Executive::placeShipsAI()
             orientation = (rand()%4)+1;
         } while (!player2.validPlace(startRow, startCol, i, orientation));
         player2.placeShip(startRow, startCol, i, orientation);
-        // check valid ai placement
-        // player2.printBoardWShip();
     }
     cout << "AI has placed ships\n";
 }
@@ -174,6 +172,11 @@ void Executive::hitMissile(Board &p1, Board &p2, int mode)
     p1.printBoardWShip();
     cout << "Enemy's board:\n";
     p2.printBoardWOShip();
+    cout << "Your Score: " << p2.getScore() << "\tOpponent Score: " << p1.getScore() << "\n\n";
+    if (p1.getLog() != "")
+    {
+        cout << "Opponent Activity:\n" << p1.getLog() << '\n';
+    }
     //Ask the user for col and idex nums
     cout << "Player " << p1.getId() << " play your move: " << endl;
     cout << "Enter the column number (A-J) of " << opponent << "'s box you want to attack : ";
@@ -183,7 +186,8 @@ void Executive::hitMissile(Board &p1, Board &p2, int mode)
     cin >> rowPos;
     checkInt(rowPos);
     rowPos--;
-
+    //clears recent activity log
+    p2.clearLog();
     //Check if the inputs are invalid
     //Keep prompting the user to re-enter inputs until the inputs are valids
     while (!p2.validHit(rowPos, colPos))
@@ -221,9 +225,8 @@ void Executive::hitMissile(Board &p1, Board &p2, int mode)
     //Print the board again after the hit without displaying the ships
     cout << "\nEnemy's updated board:\n";
     p2.printBoardWOShip();
-    //temp score location
-	cout << "Score: " << p2.getScore() << '\n';
-    //
+	cout << "Your score: " << p2.getScore() << "\tOpponent Score: " << p1.getScore() << "\n\n";
+    cout << "Recent Activity:\n" << p2.getLog();
     cout << "\nPress enter to end turn...";
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
@@ -250,6 +253,7 @@ void Executive::hitMissileAI(Board &p1, int difficulty)
     cout << "-----------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
     cout << "AI's turn:\n";
     cout << "AI thinking...\n";
+    p1.clearLog();
     this_thread::sleep_for(chrono::milliseconds(2000));
     bool hasShot = false;
     static bool hit = false;
@@ -412,6 +416,18 @@ void Executive::printWinners(Board& p1, Board& p2, int mode)
     //Winning conditions
     if (p1.allShipsSunk() && !p2.allShipsSunk())
     {
+        //print out board one final time if AI won
+        if (mode == 2)
+        {
+            cout << "-----------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
+            //Print the board without the ships
+            cout << "Your board:\n";
+            p1.printBoardWShip();
+            cout << "Enemy's board:\n";
+            p2.printBoardWOShip();
+            cout << "Your Score: " << p2.getScore() << "\tOpponent Score: " << p1.getScore() << "\n\n";
+            cout << "Opponent Activity:\n" << p1.getLog() << '\n';
+        }
         cout << opponent2 << " has won!" << endl;
     }
 

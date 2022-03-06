@@ -6,7 +6,7 @@ using namespace std;
 // Creates an empty 10x10 board of water
 // INitializer list
 // idNum in parameter as an alternative to a setter
-Board::Board(int idNum) : m_rows(10), m_cols(10), shipOrientation(0), id(idNum), score(0)
+Board::Board(int idNum) : m_rows(10), m_cols(10), shipOrientation(0), id(idNum), score(0), log("")
 {
 	m_board = new char *[m_rows];
 	for (int i = 0; i < m_rows; i++)
@@ -237,6 +237,7 @@ bool Board::updateBoardHit(int i, int j)
 	//If there is no ship, then display M for miss
 	if (m_board[i][j] == '.')
 	{
+		log += "(Missed) +0\n";
 		m_board[i][j] = 'M';
 		return false;
 	}
@@ -244,6 +245,7 @@ bool Board::updateBoardHit(int i, int j)
 	else
 	{
 		score++;
+		log += "(Hit) +1\n";
 		m_board[i][j] = 'H';
 		if (shipDestroyed(i, j))
 		{
@@ -349,6 +351,7 @@ bool Board::shipDestroyed(int i, int j)
 		}
 	}
 	score += 10 * (shipNum+1);
+	log += "(Sank Ship " + to_string(shipNum+1) + ") +" + to_string(10*(shipNum+1)) + "\n";
 	return true;
 }
 

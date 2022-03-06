@@ -14,6 +14,7 @@ class Board
 		int shipOrientation;
 		int id;
 		int score;
+		string log;
 		vector<int> shipIStart;
 		vector<int> shipJStart;
 		vector<int> shipIEnd;
@@ -46,6 +47,10 @@ class Board
 		int getId() {return id;}
 		//Returns the score of the player
 		int getScore() {return score;}
+		//Clears the log
+		void clearLog() {log = "";}
+		//Returns score log
+		string getLog() {return log;}
 		//Gets the char of the given coords;
 		char getCell( int i, int j );
 
