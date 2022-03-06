@@ -72,6 +72,9 @@ void Executive::placeShips(Board &player)
         cout << "Ship #" << i << "\n";
         cout << "Starting col index (A to J): ";
         cin >> startColIndex;
+        //only read first char
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
         //Take the staring row
         startColIndex = startColIndex - 65;
         cout << "Starting row index (1 to 10): ";
@@ -89,7 +92,7 @@ void Executive::placeShips(Board &player)
         {
             do
             {
-                cout << "PLease enter a valid orientation (1 to 4): ";
+                cout << "Please enter a valid orientation (1 to 4): ";
                 cin >> shipOrientation;
                 checkInt(shipOrientation);
             } while (shipOrientation < 1 || shipOrientation > 4);
@@ -107,6 +110,8 @@ void Executive::placeShips(Board &player)
                 cout << "Ship #" << i << "\n";
                 cout << "Starting col index (A to J): ";
                 cin >> startColIndex;
+                //only read first char
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
                 startColIndex = startColIndex - 65;
                 cout << "Starting row index (1 to 10): ";
@@ -120,7 +125,12 @@ void Executive::placeShips(Board &player)
                 cout << "Orientation: ";
                 cin >> shipOrientation;
                 checkInt(shipOrientation);
-
+                while (shipOrientation < 1 || shipOrientation > 4)
+                {
+                    cout << "Please enter a valid orientation (1 to 4): ";
+                    cin >> shipOrientation;
+                    checkInt(shipOrientation);
+                }
             } while (!player.validPlace(startRowIndex, startColIndex, i, shipOrientation));
         }
         //After filtering through the bad input, once the input is valid, place the ships on the board
@@ -183,6 +193,8 @@ void Executive::hitMissile(Board &p1, Board &p2, int mode)
     cout << "Player " << p1.getId() << " play your move: " << endl;
     cout << "Enter the column number (A-J) of " << opponent << "'s box you want to attack : ";
     cin >> colPos;
+    //only read first char
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
     colPos = colPos - 65;
     cout << "Enter the row number (1-10) of " << opponent << "'s box you want to attack : ";
     cin >> rowPos;
@@ -197,6 +209,8 @@ void Executive::hitMissile(Board &p1, Board &p2, int mode)
         cout << "Please enter valid row and column: \n";
         cout << "Enter the column number (A-J) of " << opponent << "'s box you want to attack : ";
         cin >> colPos;
+        //only read first char
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         colPos = colPos - 65;
         cout << "Enter the row number (1-10) of " << opponent << "'s box you want to attack : ";
         cin >> rowPos;
@@ -282,6 +296,7 @@ void Executive::hitMissileAI(Board &p1, int difficulty)
     static bool hit = false;
     static int row = 0, col = 0, midRow = 0, midCol = 0;
     static bool up, down, left, right;
+    p1.clearLog();
     switch( difficulty ){
         //Easy difficulty
         case 1:
@@ -458,8 +473,8 @@ void Executive::hitMissileAI(Board &p1, int difficulty)
                         }
                         break;
                     }
-                    if ( hasShot ){ break; }
                 }
+                if ( hasShot ){ break; }
             }
             break;
     }
