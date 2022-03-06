@@ -201,7 +201,7 @@ void Executive::hitMissile(Board &p1, Board &p2, int mode)
     {
         cout << "Hit Successful.\n";
         // If the hit caused the whole ship to sink
-        if (p2.shipDestroyed(rowPos, colPos))
+        if (p2.getCell(rowPos, colPos) == 'X')
         {
             cout << "Enemy ship destroyed.\n";
         }
