@@ -17,6 +17,8 @@ private:
     //Prints lines to hide other player's board
     void hideBoards();
     void placeShipsAI();
+    //Handles AI medium hitting
+    void hitMediumAI(Board &p1);
     //Handles AI hitting boards and updating arrays
     void hitMissileAI(Board &p1, int difficulty);
     //Prints the winner(s)
