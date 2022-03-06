@@ -156,6 +156,8 @@ void Executive::placeShipsAI()
         // player2.printBoardWShip();
     }
     cout << "AI has placed ships\n";
+    //Play ship placement sound
+    system("afplay ../sounds/shipPlace.wav");
 }
 
 void Executive::hitMissile(Board &p1, Board &p2, int mode)
@@ -239,6 +241,27 @@ pair<int, int> Executive::randomHit(Board &p1)
         col = rand() % 10;
         if ( p1.validHit( row, col ) ){
             p1.updateBoardHit( row, col );
+            //Play corresponding sounds
+            switch (p1.getCell(row, col))
+            {
+                case 'X':
+                    cout << "AI destroyed a ship\n";
+                    //Play explosion sound after ship hit
+                    system("afplay ../sounds/explosion.wav");
+                    break;
+                    
+                case 'H':
+                    cout << "AI hit a ship\n";
+                    //Play explosion sound after ship hit
+                    system("afplay ../sounds/explosion.wav");
+                    break;
+
+                case 'M':
+                    cout << "AI missed\n";
+                    //Play splash sound for miss
+                    system("afplay ../sounds/splash.wav");
+                    break;
+            }
             return make_pair(row, col);
         }
     }
@@ -250,7 +273,8 @@ void Executive::hitMissileAI(Board &p1, int difficulty)
     cout << "-----------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
     cout << "AI's turn:\n";
     cout << "AI thinking...\n";
-    this_thread::sleep_for(chrono::milliseconds(2000));
+    //Play firing sound
+    system("afplay ../sounds/fireSound.wav");
     bool hasShot = false;
     static bool hit = false;
     static int row = 0, col = 0, midRow = 0, midCol = 0;
@@ -376,6 +400,7 @@ void Executive::hitMissileAI(Board &p1, int difficulty)
                         if (p1.getCell(row, col) == 'X') hit = false;
                     }
                 }
+                char location = p1.getCell(row, col);
                 //If location is a miss, update direction to check next
                 if (p1.getCell(row, col) == 'M')
                 {
@@ -384,6 +409,27 @@ void Executive::hitMissileAI(Board &p1, int difficulty)
                     else if (left) {right = true, left = false;}
                     row = midRow;
                     col = midCol;
+                }
+                //Play corresponding sounds
+                switch (location)
+                {
+                    case 'X':
+                        cout << "AI destroyed a ship\n";
+                        //Play explosion sound after ship hit
+                        system("afplay ../sounds/explosion.wav");
+                        break;
+                        
+                    case 'H':
+                        cout << "AI hit a ship\n";
+                        //Play explosion sound after ship hit
+                        system("afplay ../sounds/explosion.wav");
+                        break;
+
+                    case 'M':
+                        cout << "AI missed\n";
+                        //Play splash sound for miss
+                        system("afplay ../sounds/splash.wav");
+                        break;
                 }
             }
             break;
@@ -395,6 +441,18 @@ void Executive::hitMissileAI(Board &p1, int difficulty)
                     if ( p1.getCell( i, j ) == 'S' ){
                         p1.updateBoardHit( i, j );
                         hasShot = true;
+                        if (p1.getCell(i, j) == 'X')
+                        {
+                            cout << "AI destroyed a ship\n";
+                            //Play explosion sound after ship hit
+                            system("afplay ../sounds/explosion.wav");
+                        }
+                        else
+                        {
+                            cout << "AI hit a ship\n";
+                            //Play explosion sound after ship hit
+                            system("afplay ../sounds/explosion.wav");
+                        }
                         break;
                     }
                     if ( hasShot ){ break; }
@@ -402,7 +460,6 @@ void Executive::hitMissileAI(Board &p1, int difficulty)
             }
             break;
     }
-    cout << "AI fired\n";
 }
 
 void Executive::printWinners(Board& p1, Board& p2, int mode)
@@ -453,10 +510,9 @@ void Executive::run()
             cin >> difficultyChoice;
             checkInt(difficultyChoice);
         } while (difficultyChoice < 1 || difficultyChoice > 3);
-        //Play intro sound at game start
-        system("afplay ../sounds/intro.wav");
     }
-
+    //Play intro sound
+    system("afplay ../sounds/intro.wav");
     //Player1 places ships
     placeShips(player1);
     cout << "Press enter to end ship placement...";
@@ -470,8 +526,6 @@ void Executive::run()
         cout << "Let's destroy some ships!" << endl;
         cout << "Press enter to end ship placement...";
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        //Play intro sound
-        system("afplay ../sounds/intro.wav");
         //Goes through the firing between players until a player wins
         do
         {
