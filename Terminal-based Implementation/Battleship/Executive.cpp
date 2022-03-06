@@ -284,18 +284,168 @@ pair<int, int> Executive::randomHit(Board &p1)
     }
 }
 
+void Executive::hitMediumAI(Board &p1)
+{
+    static bool hit = false;
+    static int row = 0, col = 0, midRow = 0, midCol = 0;
+    static bool up, down, left, right;
+    //Vector holding coordinates of known unsunken ships
+    vector< pair<int, int> > hits = p1.getHits();
+    //If nothing has been hit
+    if (!hit && hits.empty())
+    {
+        pair<int, int> coor = randomHit(p1);
+        row = coor.first;
+        col = coor.second;
+        midRow = row;
+        midCol = col;
+        up = true, down = false, left = false, right = false;
+        if (p1.getCell(row, col) == 'H') hit = true;
+    }
+    else
+    {
+        //Choose a hit from the list of coordinates to sink
+        if (!hit)
+        {
+            //Get coordinate pair
+            pair<int, int> currentHit = hits.front();
+            row = currentHit.first;
+            col = currentHit.second;
+            midRow = row;
+            midCol = col;
+            //Reset adjacent cells checking order
+            up = true, down = false, left = false, right = false;
+            hit = true;
+        }
+        if (up)
+        {
+            row = row - 1;
+            //Skip over any H's to see if the ship goes further in this direction
+            while (row > 0 && p1.getCell(row, col) == 'H')
+            {
+                row = row - 1;
+            }
+            //Check if the new spot is valid
+            if (p1.validHit(row, col))
+            {
+                //Fire and determine is ship is now sunk
+                p1.updateBoardHit(row, col);
+                if (p1.getCell(row, col) == 'X') hit = false;
+            }
+            else
+            {
+                //Try next direction and reset row
+                up = false;
+                down = true;
+                row = midRow;
+            }
+        }
+        if (down)
+        {
+            row = row + 1;
+            //Skip over any H's to see if the ship goes further in this direction
+            while (row < 9 && p1.getCell(row, col) == 'H')
+            {
+                row = row + 1;
+            }
+            //Check if the new spot is valid
+            if (p1.validHit(row, col))
+            {
+                //Fire and determine is ship is now sunk
+                p1.updateBoardHit(row, col);
+                if (p1.getCell(row, col) == 'X') hit = false;
+            }
+            else
+            {
+                //Try next direction and reset row
+                down = false;
+                left = true;
+                row = midRow;
+            }
+        }
+        if (left)
+        {
+            col = col - 1;
+            //Skip over any H's to see if the ship goes further in this direction
+            while (col > 0 && p1.getCell(row, col) == 'H')
+            {
+                col = col - 1;
+            }
+            //Check if the new spot is valid
+            if (p1.validHit(row, col))
+            {
+                //Fire and determine is ship is now sunk
+                p1.updateBoardHit(row, col);
+                if (p1.getCell(row, col) == 'X') hit = false;
+            }
+            else
+            {
+                //Try next direction and reset row
+                left = false;
+                right = true;
+                col = midCol;
+            }
+        }
+        if (right)
+        {
+            col = col + 1;
+            //Skip over any H's to see if the ship goes further in this direction
+            while (col < 9 && p1.getCell(row, col) == 'H')
+            {
+                col = col + 1;
+            }
+            //Check if the new spot is valid
+            if (p1.validHit(row, col))
+            {
+                //Fire and determine is ship is now sunk
+                p1.updateBoardHit(row, col);
+                if (p1.getCell(row, col) == 'X') hit = false;
+            }
+        }
+        char location = p1.getCell(row, col);
+        //If location is a miss, update direction to check next
+        if (p1.getCell(row, col) == 'M')
+        {
+            if (up) {down = true, up = false;}
+            else if (down) {left = true, down = false;}
+            else if (left) {right = true, left = false;}
+            row = midRow;
+            col = midCol;
+        }
+        //Play corresponding sounds
+        switch (location)
+        {
+            case 'X':
+                cout << "AI destroyed a ship\n";
+                //Play explosion sound after ship hit
+                system("afplay ../sounds/explosion.wav");
+                break;
+                
+            case 'H':
+                cout << "AI hit a ship\n";
+                //Play explosion sound after ship hit
+                system("afplay ../sounds/explosion.wav");
+                break;
+
+            case 'M':
+                cout << "AI missed\n";
+                //Play splash sound for miss
+                system("afplay ../sounds/splash.wav");
+                break;
+        }
+    }
+}
+
 //Depending on the difficulty inserted, it will adjusts accordingly 
 void Executive::hitMissileAI(Board &p1, int difficulty)
 {
     cout << "-----------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
     cout << "AI's turn:\n";
     cout << "AI thinking...\n";
+    this_thread::sleep_for(chrono::milliseconds(1000));
     //Play firing sound
     system("afplay ../sounds/fireSound.wav");
     bool hasShot = false;
-    static bool hit = false;
-    static int row = 0, col = 0, midRow = 0, midCol = 0;
-    static bool up, down, left, right;
     p1.clearLog();
     switch( difficulty ){
         //Easy difficulty
@@ -304,157 +454,12 @@ void Executive::hitMissileAI(Board &p1, int difficulty)
             break;
         //Medium difficulty
         case 2:
-        {
-            //Vector holding coordinates of known unsunken ships
-            vector< pair<int, int> > hits = p1.getHits();
-            //If nothing has been hit
-            if (!hit && hits.empty())
-            {
-                pair<int, int> coor = randomHit(p1);
-                row = coor.first;
-                col = coor.second;
-                midRow = row;
-                midCol = col;
-                up = true, down = false, left = false, right = false;
-                if (p1.getCell(row, col) == 'H') hit = true;
-            }
-            else
-            {
-                //Choose a hit from the list of coordinates to sink
-                if (!hit)
-                {
-                    //Get coordinate pair
-                    pair<int, int> currentHit = hits.front();
-                    row = currentHit.first;
-                    col = currentHit.second;
-                    midRow = row;
-                    midCol = col;
-                    //Reset adjacent cells checking order
-                    up = true, down = false, left = false, right = false;
-                    hit = true;
-                }
-                if (up)
-                {
-                    row = row - 1;
-                    //Skip over any H's to see if the ship goes further in this direction
-                    while (row > 0 && p1.getCell(row, col) == 'H')
-                    {
-                        row = row - 1;
-                    }
-                    //Check if the new spot is valid
-                    if (p1.validHit(row, col))
-                    {
-                        //Fire and determine is ship is now sunk
-                        p1.updateBoardHit(row, col);
-                        if (p1.getCell(row, col) == 'X') hit = false;
-                    }
-                    else
-                    {
-                        //Try next direction and reset row
-                        up = false;
-                        down = true;
-                        row = midRow;
-                    }
-                }
-                if (down)
-                {
-                    row = row + 1;
-                    //Skip over any H's to see if the ship goes further in this direction
-                    while (row < 9 && p1.getCell(row, col) == 'H')
-                    {
-                        row = row + 1;
-                    }
-                    //Check if the new spot is valid
-                    if (p1.validHit(row, col))
-                    {
-                        //Fire and determine is ship is now sunk
-                        p1.updateBoardHit(row, col);
-                        if (p1.getCell(row, col) == 'X') hit = false;
-                    }
-                    else
-                    {
-                        //Try next direction and reset row
-                        down = false;
-                        left = true;
-                        row = midRow;
-                    }
-                }
-                if (left)
-                {
-                    col = col - 1;
-                    //Skip over any H's to see if the ship goes further in this direction
-                    while (col > 0 && p1.getCell(row, col) == 'H')
-                    {
-                        col = col - 1;
-                    }
-                    //Check if the new spot is valid
-                    if (p1.validHit(row, col))
-                    {
-                        //Fire and determine is ship is now sunk
-                        p1.updateBoardHit(row, col);
-                        if (p1.getCell(row, col) == 'X') hit = false;
-                    }
-                    else
-                    {
-                        //Try next direction and reset row
-                        left = false;
-                        right = true;
-                        col = midCol;
-                    }
-                }
-                if (right)
-                {
-                    col = col + 1;
-                    //Skip over any H's to see if the ship goes further in this direction
-                    while (col < 9 && p1.getCell(row, col) == 'H')
-                    {
-                        col = col + 1;
-                    }
-                    //Check if the new spot is valid
-                    if (p1.validHit(row, col))
-                    {
-                        //Fire and determine is ship is now sunk
-                        p1.updateBoardHit(row, col);
-                        if (p1.getCell(row, col) == 'X') hit = false;
-                    }
-                }
-                char location = p1.getCell(row, col);
-                //If location is a miss, update direction to check next
-                if (p1.getCell(row, col) == 'M')
-                {
-                    if (up) {down = true, up = false;}
-                    else if (down) {left = true, down = false;}
-                    else if (left) {right = true, left = false;}
-                    row = midRow;
-                    col = midCol;
-                }
-                //Play corresponding sounds
-                switch (location)
-                {
-                    case 'X':
-                        cout << "AI destroyed a ship\n";
-                        //Play explosion sound after ship hit
-                        system("afplay ../sounds/explosion.wav");
-                        break;
-                        
-                    case 'H':
-                        cout << "AI hit a ship\n";
-                        //Play explosion sound after ship hit
-                        system("afplay ../sounds/explosion.wav");
-                        break;
-
-                    case 'M':
-                        cout << "AI missed\n";
-                        //Play splash sound for miss
-                        system("afplay ../sounds/splash.wav");
-                        break;
-                }
-            }
+            hitMediumAI(p1);
             break;
-        }
         //Hard difficulty
         case 3:
             for ( int i = 0 ; i < 10 ; i ++ ){
+                if ( hasShot ){ break; }
                 for ( int j = 0 ; j < 10 ; j ++ ){
                     if ( p1.getCell( i, j ) == 'S' ){
                         p1.updateBoardHit( i, j );
@@ -474,7 +479,6 @@ void Executive::hitMissileAI(Board &p1, int difficulty)
                         break;
                     }
                 }
-                if ( hasShot ){ break; }
             }
             break;
     }
