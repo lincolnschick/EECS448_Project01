@@ -5,6 +5,7 @@
 #include <time.h>
 #include <chrono>
 #include <thread>
+#include <utility>
 using namespace std;
 
 //function to check for integer
@@ -129,17 +130,21 @@ void Executive::placeShips(Board &player)
     }
 }
 
+//randomly placement of ships for ai
 void Executive::placeShipsAI()
 {
     cout << "AI's ship placement:\nAI thinking...\n";
-    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+    this_thread::sleep_for(chrono::milliseconds(2000));
 
     srand(time(NULL));
     int startRow = 0, startCol = 0, orientation = 0;
+    //places for all ships selected
     for (int i = 1; i <= numOfShips; i++)
     {
+        //runs at least once and then check if valid placement
         do
         {
+            //randomizes location
             startRow = rand()%10;
             startCol = rand()%10;
             orientation = (rand()%4)+1;
@@ -216,6 +221,7 @@ void Executive::hitMissile(Board &p1, Board &p2, int mode)
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 
+//returns coordinate pair
 pair<int, int> Executive::randomHit(Board &p1)
 {
     int row = 0;
@@ -237,7 +243,7 @@ void Executive::hitMissileAI(Board &p1, int difficulty)
     cout << "-----------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
     cout << "AI's turn:\n";
     cout << "AI thinking...\n";
-    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+    this_thread::sleep_for(chrono::milliseconds(2000));
     bool hasShot = false;
     static bool hit = false;
     static int row = 0, col = 0, midRow = 0, midCol = 0;
