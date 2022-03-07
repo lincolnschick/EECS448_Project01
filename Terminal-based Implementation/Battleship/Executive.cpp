@@ -171,7 +171,7 @@ void Executive::placeShipsAI()
 void Executive::hitMissile(Board &p1, Board &p2, int mode)
 {
     //Update opponent for AI and 2 player modes
-    string opponent = mode == 1 ? "player" + to_string(p2.getId()) : "the AI";
+    string opponent = mode == 1 ? "player " + to_string(p2.getId()) : "the AI";
     if (mode == 1)
     {
         hideBoards();
