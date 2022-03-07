@@ -29,11 +29,21 @@ This would be the group's **Terminal-Based Implementation** folder. However upon
 ## Gameplay
 The following are screenshots of gameplay. While each game has the potential for a different outcome, this is the general look and feel of our implementation:
 
+<img width="1208" alt="startGame" src="https://user-images.githubusercontent.com/98842234/156965248-d0cbc83a-4077-4f1b-9a3a-080f0644622d.png">
+
+<img width="1198" alt="finishedGame" src="https://user-images.githubusercontent.com/98842234/156965256-58dd0de4-9f8c-4a57-aa26-5700c161d07d.png">
+
+<img width="1200" alt="AIstart" src="https://user-images.githubusercontent.com/98842234/156965263-28c599d1-f955-4427-bed9-a85a684f6ce6.png">
+
+
+
+
 ## Installation
 Our Battleship game functions by using a C++ _**terminal-based implementation**_.
 - _**Clone**_ or _**download**_ the repository to your local machine,
 - Locate and navigate to the source files (**Terminal-based Implementation/Battleship**) in your terminal.
--Use the _make_ command to compile and build the executable.
+-Use the _make_ command to compile and build
+the executable.
 -Use the command ./battleship to run the program.
 
 > Any terminal implementation should work, just make sure you have a large enough resolution in order to be able to view the game-board correctly.
